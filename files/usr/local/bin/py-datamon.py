@@ -10,7 +10,7 @@
 #
 # ----------------------------------------------------------------------------
 
-import locale, time, os, sys, json, threading, signal
+import locale, time, sys, json, traceback, signal
 from   argparse import ArgumentParser
 
 # --- application class   ----------------------------------------------------
@@ -38,13 +38,13 @@ class App(object):
     parser.add_argument('-p', '--plot', action='store_true',
                         dest='plot', default=False,
                         help='create plots (png)')
-    parser.add_argument('-f', '--freq', nargs=1, metavar='freq',
+    parser.add_argument('-f', '--freq', metavar='freq',
       default=0.5, help='update frequency')
 
-    parser.add_argument('-c', '--config', nargs=1, metavar='conf',
-      default=0, help='config-file')
+    parser.add_argument('-c', '--config', metavar='conf',
+      help='config-file')
     parser.add_argument('-o', '--output', nargs=1, metavar='output',
-      default=0, help='output-file')
+      help='output-file')
 
     parser.add_argument('-d', '--debug', action='store_true',
       dest='debug', default=False,
@@ -55,8 +55,7 @@ class App(object):
     parser.add_argument('-h', '--help', action='help',
       help='print this help')
 
-    parser.add_argument('input', nargs=1, metavar='input',
-      default=0, help='input-file')
+    parser.add_argument('input', metavar='input',help='input-file')
 
     return parser
 
@@ -70,6 +69,28 @@ class App(object):
     elif self.debug:
       sys.stderr.write("[DEBUG %s] %s\n" % (time.strftime("%H:%M:%S"),text))
     sys.stderr.flush()
+
+  # --- read configuration   --------------------------------------------------
+
+  def read_config(self):
+    """ read configuration-file, if supplied """
+
+    self._graphs = []
+    if not self.config:
+      return
+
+    try:
+      self.msg("App: reading configuration from %s" % self.config)
+      f = open(self.config,"r")
+      self._graphs = json.load(f)
+      f.close()
+      self.msg("App: found configuration for %d graphs" % len(self._graphs))
+      return True
+    except:
+      self.msg("App: reading configuration from %s failed" % self.config,True)
+      if self.debug:
+        traceback.print_exc()
+      return False
 
   # --- setup signal handler   ------------------------------------------------
 
@@ -103,8 +124,9 @@ if __name__ == '__main__':
   # set local to default from environment
   locale.setlocale(locale.LC_ALL, '')
 
-  # create client-class and parse arguments
+  # create application-class, read configuration and run
   app = App()
-  app.run()
-  signal.pause()
-  app.cleanup()
+  if app.read_config():
+    app.run()
+    signal.pause()
+    app.cleanup()
