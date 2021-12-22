@@ -10,8 +10,9 @@
 #
 # ----------------------------------------------------------------------------
 
-import locale, time, sys, json, traceback, signal
+import locale, time, os, sys, json, traceback, signal
 from   argparse import ArgumentParser
+from   pathlib  import Path
 
 # --- application class   ----------------------------------------------------
 
@@ -76,9 +77,12 @@ class App(object):
     """ read configuration-file, if supplied """
 
     self._graphs = []
-    if not self.config:
-      return
+    p = Path(self.config) if self.config else (
+      Path(os.path.dirname(sys.argv[0]),"..","lib/py-datamon/configs/default.json"))
 
+    if not p.exists():
+      self.msg("App: config-file %s does not exist" % str(p),True)
+      return False
     try:
       self.msg("App: reading configuration from %s" % self.config)
       f = open(self.config,"r")
@@ -126,7 +130,8 @@ if __name__ == '__main__':
 
   # create application-class, read configuration and run
   app = App()
-  if app.read_config():
-    app.run()
-    signal.pause()
-    app.cleanup()
+  if not app.read_config():
+    sys.exit(3)
+  app.run()
+  signal.pause()
+  app.cleanup()
