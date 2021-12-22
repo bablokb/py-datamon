@@ -1,10 +1,10 @@
-{[
+{"graphs": [
   { "width": 600,
     "height": 400,
     "title":  "Graph created with default.json",
     "x": {"col":   1,
           "label": "time"},
-    "y": [{"col:    2,
+    "y": [{"col":   2,
            "label": "value",
            "type":  "line",
            "color": "blue"
