@@ -77,21 +77,28 @@ class App(object):
     """ read configuration-file, if supplied """
 
     self._graphs = []
-    p = Path(self.config) if self.config else (
-      Path(os.path.dirname(sys.argv[0]),"..","lib/py-datamon/configs/default.json"))
+    if self.config:
+      p = Path(self.config)
+      if not p.exists() and not p.is_absolute():
+        # try in default location
+        p = Path(os.path.dirname(
+          sys.argv[0]),"..","lib/py-datamon/configs",self.config)
+        if not p.exists():
+          self.msg("App: config-file %s does not exist" % self.config,True)
+          return False
+    else:
+      p = Path(os.path.dirname(
+        sys.argv[0]),"..","lib/py-datamon/configs/default.json")
 
-    if not p.exists():
-      self.msg("App: config-file %s does not exist" % str(p),True)
-      return False
     try:
-      self.msg("App: reading configuration from %s" % self.config)
-      f = open(self.config,"r")
+      self.msg("App: reading configuration from %s" % str(p))
+      f = open(p,"r")
       self._graphs = json.load(f)
       f.close()
       self.msg("App: found configuration for %d graphs" % len(self._graphs))
       return True
     except:
-      self.msg("App: reading configuration from %s failed" % self.config,True)
+      self.msg("App: reading configuration from %s failed" % str(p),True)
       if self.debug:
         traceback.print_exc()
       return False
