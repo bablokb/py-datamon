@@ -81,14 +81,13 @@ class App(object):
       p = Path(self.config)
       if not p.exists() and not p.is_absolute():
         # try in default location
-        p = Path(os.path.dirname(
-          sys.argv[0]),"..","lib/py-datamon/configs",self.config)
+        p = Path(sys.argv[0]).parent / "../lib/py-datamon/configs" / self.config
         if not p.exists():
           self.msg("App: config-file %s does not exist" % self.config,True)
           return False
     else:
-      p = Path(os.path.dirname(
-        sys.argv[0]),"..","lib/py-datamon/configs/default.json")
+      # use default
+      p = Path(sys.argv[0]).parent / "../lib/py-datamon/configs/default.json"
 
     try:
       self.msg("App: reading configuration from %s" % str(p))
