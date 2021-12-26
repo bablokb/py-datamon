@@ -17,7 +17,7 @@
 #
 # ----------------------------------------------------------------------------
 
-import locale, time, os, sys, json, traceback, signal
+import locale, time, os, sys, json, traceback, signal, threading
 from   argparse import ArgumentParser
 from   pathlib  import Path
 
@@ -30,6 +30,7 @@ class App(object):
   def __init__(self):
     """ constructor """
 
+    self._stop_event = threading.Event()
     parser = self._get_parser()
     parser.parse_args(namespace=self)
 
@@ -121,7 +122,8 @@ class App(object):
 
   def cleanup(self):
     """ cleanup ressources """
-    pass
+
+    self._stop_event.set()
 
   # --- run application   ----------------------------------------------------
 
