@@ -3,6 +3,13 @@
 # ----------------------------------------------------------------------------
 # A data-collector and monitor for sensor data.
 #
+# The program reads data from a file or from stdin (use filename "-"). If
+# you want to process data from a serial input, configure the serial line
+# and pipe the date to stdin of this program.
+#
+# stty -F /dev/ttyUSB0 921600
+# py-datamon.py -c myconf.json -m - < /dev/ttyUSB0
+#
 # Author: Bernhard Bablok
 # License: GPL3
 #
