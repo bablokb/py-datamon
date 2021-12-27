@@ -17,7 +17,8 @@
 #
 # ----------------------------------------------------------------------------
 
-import locale, time, os, sys, json, traceback, signal, threading
+import locale, time, os, sys, json, traceback, signal, threading, select
+import queue
 from   argparse import ArgumentParser
 from   pathlib  import Path
 
@@ -25,12 +26,18 @@ from   pathlib  import Path
 
 class App(object):
 
+  # --- constants   ----------------------------------------------------------
+
+  WAIT_INTERVAL = 1     # interval to check for stop-event
+
   # --- constructor   --------------------------------------------------------
 
   def __init__(self):
     """ constructor """
 
+    self._threads    = []
     self._stop_event = threading.Event()
+    self._data       = []
     parser = self._get_parser()
     parser.parse_args(namespace=self)
 
@@ -67,6 +74,37 @@ class App(object):
     parser.add_argument('input', metavar='input',help='input-file')
 
     return parser
+
+  # --- read data   ----------------------------------------------------------
+
+  def _read_data(self):
+    """ read data and put into data-frame """
+
+    # make sure the open call does not block
+    if self.input == "-":
+      self.msg("App: reading data from stdin")
+      read_list = [sys.stdin]
+    else:
+      self.msg("App: reading data from %s" % self.input)
+      fd = os.open(self.input,os.O_RDONLY|os.O_NONBLOCK)
+      read_list = [os.fdopen(fd)]
+
+    while read_list:
+      fd_ready = select.select(read_list,[],[],App.WAIT_INTERVAL)[0]
+      if self._stop_event.is_set():
+        self.msg("App: request to stop reading")
+        break
+      if fd_ready:
+        line = fd_ready[0].readline().rstrip('\n')
+        #self.msg("App: input line: %s" % line)
+        if not line:             # EOF, remove file from input list
+          read_list.clear()
+        elif line.rstrip():      # optional: skipping empty lines
+          # process line
+          self._data.append(line)
+
+    self.msg("App: no more input, stopping program")
+    os.kill(os.getpid(), signal.SIGINT)
 
   # --- print message   ------------------------------------------------------
 
@@ -125,6 +163,9 @@ class App(object):
 
     self._stop_event.set()
 
+    map(threading.Thread.join,self._threads)
+    self.msg("App: ... finished")
+
   # --- run application   ----------------------------------------------------
 
   def run(self):
@@ -134,7 +175,10 @@ class App(object):
     signal.signal(signal.SIGTERM, self.signal_handler)
     signal.signal(signal.SIGINT,  self.signal_handler)
 
-    self.msg("App: running...")
+    reader_thread = threading.Thread(target=self._read_data)
+    reader_thread.start()
+    self._threads.append(reader_thread)
+    self.msg("App: running ...")
 
 # --- main program   ---------------------------------------------------------
 
@@ -149,4 +193,3 @@ if __name__ == '__main__':
     sys.exit(3)
   app.run()
   signal.pause()
-  app.cleanup()
