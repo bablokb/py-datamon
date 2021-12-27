@@ -59,8 +59,6 @@ class App(object):
 
     parser.add_argument('-c', '--config', metavar='conf',
       help='config-file')
-    parser.add_argument('-o', '--output', nargs=1, metavar='output',
-      help='output-file')
 
     parser.add_argument('-d', '--debug', action='store_true',
       dest='debug', default=False,
