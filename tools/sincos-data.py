@@ -16,9 +16,10 @@ import sys, time, math
 delay = float(sys.argv[1]) if len(sys.argv) > 1 else 0.01
 y = [None,None]
 
+t0 = time.perf_counter()
 while True:
-  t = time.perf_counter()
+  t = time.perf_counter() - t0
   y[0] = str(math.sin(t))
   y[1] = str( math.cos(t))
-  print("%.0f,%s" % (t,",".join(y)))
+  print("%f,%s" % (t,",".join(y)),flush=True)
   time.sleep(delay)
