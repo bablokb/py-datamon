@@ -22,6 +22,8 @@ import queue
 from   argparse import ArgumentParser
 from   pathlib  import Path
 
+import pandas as pd
+
 # --- application class   ----------------------------------------------------
 
 class App(object):
@@ -37,7 +39,7 @@ class App(object):
 
     self._threads    = []
     self._stop_event = threading.Event()
-    self._data       = []
+    self._data       = None
     parser = self._get_parser()
     parser.parse_args(namespace=self)
 
@@ -173,9 +175,19 @@ class App(object):
     signal.signal(signal.SIGTERM, self.signal_handler)
     signal.signal(signal.SIGINT,  self.signal_handler)
 
-    reader_thread = threading.Thread(target=self._read_data)
-    reader_thread.start()
-    self._threads.append(reader_thread)
+    # use a reader-thread if we are reading from a pipe or device, otherwise
+    # just import the csv-data directly
+    if self.input != "-" and Path(self.input).is_file():
+      self.msg("App: reading data from %s" % self.input)
+      self._data = pd.read_csv(self.input,header=None)
+      if self.debug:
+        print("-"*75)
+        print(self._data.head(10))
+        print("-"*75)
+    else:
+      reader_thread = threading.Thread(target=self._read_data)
+      reader_thread.start()
+      self._threads.append(reader_thread)
     self.msg("App: running ...")
 
 # --- main program   ---------------------------------------------------------
