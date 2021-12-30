@@ -78,7 +78,7 @@ class App(object):
   # --- read data   ----------------------------------------------------------
 
   def _read_data(self):
-    """ read data and put into data-frame """
+    """ read data and add it to a queue """
 
     # make sure the open call does not block
     if self.input == "-":
@@ -89,6 +89,7 @@ class App(object):
       fd = os.open(self.input,os.O_RDONLY|os.O_NONBLOCK)
       read_list = [os.fdopen(fd)]
 
+    self._data_queue = queue.Queue()
     while read_list:
       fd_ready = select.select(read_list,[],[],App.WAIT_INTERVAL)[0]
       if self._stop_event.is_set():
@@ -101,7 +102,7 @@ class App(object):
           read_list.clear()
         elif line.rstrip():      # optional: skipping empty lines
           # process line
-          self._data.append(line)
+          self._data_queue.put(line)
 
     self.msg("App: no more input, stopping program")
     os.kill(os.getpid(), signal.SIGINT)
