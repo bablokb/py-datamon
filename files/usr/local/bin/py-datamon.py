@@ -24,9 +24,16 @@ from   pathlib  import Path
 
 import pandas as pd
 
+# --- application imports   --------------------------------------------------
+
+libdir = Path(sys.argv[0]).parent / "../lib/py-datamon"
+sys.path.append(str(libdir))
+
+from lib import DMPlot
+
 # --- application class   ----------------------------------------------------
 
-class App(object):
+class App:
 
   # --- constants   ----------------------------------------------------------
 
@@ -36,6 +43,8 @@ class App(object):
 
   def __init__(self):
     """ constructor """
+
+    self.is_live     = False
 
     self._threads    = []
     self._stop_event = threading.Event()
@@ -185,9 +194,25 @@ class App(object):
         print("-"*75)
     else:
       # use a reader-thread if we are reading from a pipe or device
+      self.is_live = True
       reader_thread = threading.Thread(target=self._read_data)
       reader_thread.start()
       self._threads.append(reader_thread)
+
+  # --- plot the data   ------------------------------------------------------
+
+  def _plot(self):
+    """ plot the data """
+
+    if self.is_live:
+      plotter = DMPlot(self.config,queue=self._data_queue,
+                                                 stop_event=self._stop_event)
+      plotter_thread = threading.Thread(target=plotter.plot)
+      plotter_thread.start()
+      self._threads.append(plotter_thread)
+    else:
+      plotter = DMPlot(self.config,data=self._data)
+      plotter.plot()
 
   # --- run application   ----------------------------------------------------
 
@@ -196,6 +221,7 @@ class App(object):
 
     self._read()
     self.msg("App: running ...")
+    self._plot()
 
 # --- main program   ---------------------------------------------------------
 
@@ -215,4 +241,5 @@ if __name__ == '__main__':
 
   # run application threads
   app.run()
-  signal.pause()
+  if app.is_live:
+    signal.pause()
