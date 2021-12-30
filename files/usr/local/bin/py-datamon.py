@@ -167,18 +167,13 @@ class App(object):
     map(threading.Thread.join,self._threads)
     self.msg("App: ... finished")
 
-  # --- run application   ----------------------------------------------------
+  # --- read data   ----------------------------------------------------------
 
-  def run(self):
-    """ run application """
+  def _read(self):
+    """ read data from csv (synchronously) or from pipe/device (async) """
 
-    # setup signal-handler
-    signal.signal(signal.SIGTERM, self.signal_handler)
-    signal.signal(signal.SIGINT,  self.signal_handler)
-
-    # use a reader-thread if we are reading from a pipe or device, otherwise
-    # just import the csv-data directly
     if self.input != "-" and Path(self.input).is_file():
+      # just import the csv-data directly
       self.msg("App: reading data from %s" % self.input)
       self._data = pd.read_csv(self.input,header=None)
       if any(self._data.iloc[0].apply(lambda x: isinstance(x, str))):
@@ -189,9 +184,17 @@ class App(object):
         print(self._data.head(10))
         print("-"*75)
     else:
+      # use a reader-thread if we are reading from a pipe or device
       reader_thread = threading.Thread(target=self._read_data)
       reader_thread.start()
       self._threads.append(reader_thread)
+
+  # --- run application   ----------------------------------------------------
+
+  def run(self):
+    """ run application """
+
+    self._read()
     self.msg("App: running ...")
 
 # --- main program   ---------------------------------------------------------
@@ -201,9 +204,15 @@ if __name__ == '__main__':
   # set local to default from environment
   locale.setlocale(locale.LC_ALL, '')
 
-  # create application-class, read configuration and run
+  # create application-class, read configuration
   app = App()
   if not app.read_config():
     sys.exit(3)
+
+  # setup signal handlers
+  signal.signal(signal.SIGTERM,app.signal_handler)
+  signal.signal(signal.SIGINT,app.signal_handler)
+
+  # run application threads
   app.run()
   signal.pause()
