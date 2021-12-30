@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # A data-collector and monitor for sensor data.
@@ -7,7 +7,7 @@
 # you want to process data from a serial input, configure the serial line
 # and pipe the date to stdin of this program.
 #
-# stty -F /dev/ttyUSB0 921600
+# stty -echo -F /dev/ttyUSB0 115200
 # py-datamon.py -c myconf.json -m - < /dev/ttyUSB0
 #
 # Author: Bernhard Bablok
