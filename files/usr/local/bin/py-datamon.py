@@ -180,6 +180,9 @@ class App(object):
     if self.input != "-" and Path(self.input).is_file():
       self.msg("App: reading data from %s" % self.input)
       self._data = pd.read_csv(self.input,header=None)
+      if any(self._data.iloc[0].apply(lambda x: isinstance(x, str))):
+        self.msg("App: dropping csv-header")
+        self._data = self._data[1:].reset_index(drop=True)
       if self.debug:
         print("-"*75)
         print(self._data.head(10))
