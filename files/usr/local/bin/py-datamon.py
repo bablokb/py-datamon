@@ -29,7 +29,7 @@ import pandas as pd
 libdir = Path(sys.argv[0]).parent / "../lib/py-datamon"
 sys.path.append(str(libdir))
 
-from lib import DMPlot
+from lib import DMPlot, DMConfigPlot
 
 # --- application class   ----------------------------------------------------
 
@@ -132,7 +132,6 @@ class App:
   def read_config(self):
     """ read configuration-file, if supplied """
 
-    self._graphs = []
     if self.config:
       p = Path(self.config)
       if not p.exists() and not p.is_absolute():
@@ -148,9 +147,9 @@ class App:
     try:
       self.msg("App: reading configuration from %s" % str(p))
       f = open(p,"r")
-      self._graphs = json.load(f)
+      plot = json.load(f)
       f.close()
-      self.msg("App: found configuration for %d graphs" % len(self._graphs))
+      self.config = DMConfigPlot(self,plot)
       return True
     except:
       self.msg("App: reading configuration from %s failed" % str(p),True)
