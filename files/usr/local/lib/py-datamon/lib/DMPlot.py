@@ -19,9 +19,10 @@ class DMPlot:
 
   # --- constructor   --------------------------------------------------------
 
-  def __init__(self,config,data=None,queue=None,stop_event=None):
+  def __init__(self,app,config,data=None,queue=None,stop_event=None):
     """ constructor """
 
+    self.msg         = app.msg
     self._config     = config
     self._data       = data
     self._queue      = queue

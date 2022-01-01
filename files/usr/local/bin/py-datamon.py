@@ -204,13 +204,13 @@ class App:
     """ plot the data """
 
     if self.is_live:
-      plotter = DMPlot(self.config,queue=self._data_queue,
+      plotter = DMPlot(self,self.config,queue=self._data_queue,
                                                  stop_event=self._stop_event)
       plotter_thread = threading.Thread(target=plotter.plot)
       plotter_thread.start()
       self._threads.append(plotter_thread)
     else:
-      plotter = DMPlot(self.config,data=self._data)
+      plotter = DMPlot(self,self.config,data=self._data)
       plotter.plot()
 
   # --- run application   ----------------------------------------------------
