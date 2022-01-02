@@ -84,6 +84,44 @@ class App:
 
     return parser
 
+  # --- plot the data   ------------------------------------------------------
+
+  def _plot(self):
+    """ plot the data """
+
+    if self.is_live:
+      plotter = DMPlot(self,self.config,queue=self._data_queue,
+                                                 stop_event=self._stop_event)
+      plotter_thread = threading.Thread(target=plotter.plot)
+      plotter_thread.start()
+      self._threads.append(plotter_thread)
+    else:
+      plotter = DMPlot(self,self.config,data=self._data)
+      plotter.plot()
+
+  # --- read data   ----------------------------------------------------------
+
+  def _read(self):
+    """ read data from csv (synchronously) or from pipe/device (async) """
+
+    if self.input != "-" and Path(self.input).is_file():
+      # just import the csv-data directly
+      self.msg("App: reading data from %s" % self.input)
+      self._data = pd.read_csv(self.input,header=None)
+      if any(self._data.iloc[0].apply(lambda x: isinstance(x, str))):
+        self.msg("App: dropping csv-header")
+        self._data = self._data[1:].reset_index(drop=True)
+      if self.debug:
+        print("-"*75)
+        print(self._data.head(10))
+        print("-"*75)
+    else:
+      # use a reader-thread if we are reading from a pipe or device
+      self.is_live = True
+      reader_thread = threading.Thread(target=self._read_data)
+      reader_thread.start()
+      self._threads.append(reader_thread)
+
   # --- read data   ----------------------------------------------------------
 
   def _read_data(self):
@@ -174,44 +212,6 @@ class App:
 
     map(threading.Thread.join,self._threads)
     self.msg("App: ... finished")
-
-  # --- read data   ----------------------------------------------------------
-
-  def _read(self):
-    """ read data from csv (synchronously) or from pipe/device (async) """
-
-    if self.input != "-" and Path(self.input).is_file():
-      # just import the csv-data directly
-      self.msg("App: reading data from %s" % self.input)
-      self._data = pd.read_csv(self.input,header=None)
-      if any(self._data.iloc[0].apply(lambda x: isinstance(x, str))):
-        self.msg("App: dropping csv-header")
-        self._data = self._data[1:].reset_index(drop=True)
-      if self.debug:
-        print("-"*75)
-        print(self._data.head(10))
-        print("-"*75)
-    else:
-      # use a reader-thread if we are reading from a pipe or device
-      self.is_live = True
-      reader_thread = threading.Thread(target=self._read_data)
-      reader_thread.start()
-      self._threads.append(reader_thread)
-
-  # --- plot the data   ------------------------------------------------------
-
-  def _plot(self):
-    """ plot the data """
-
-    if self.is_live:
-      plotter = DMPlot(self,self.config,queue=self._data_queue,
-                                                 stop_event=self._stop_event)
-      plotter_thread = threading.Thread(target=plotter.plot)
-      plotter_thread.start()
-      self._threads.append(plotter_thread)
-    else:
-      plotter = DMPlot(self,self.config,data=self._data)
-      plotter.plot()
 
   # --- run application   ----------------------------------------------------
 
