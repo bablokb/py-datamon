@@ -34,4 +34,5 @@ while True:
   i -= 1
   if i == 0:
     break
-  time.sleep(delay)
+  delta = time.perf_counter() - t
+  time.sleep(delay-delta/100000000)
