@@ -195,6 +195,13 @@ class App:
         traceback.print_exc()
       return False
 
+  # --- return data-object   --------------------------------------------------
+
+  def get_data(self):
+    """ return data-object """
+
+    return self._data
+
   # --- setup signal handler   ------------------------------------------------
 
   def signal_handler(self,_signo, _stack_frame):
