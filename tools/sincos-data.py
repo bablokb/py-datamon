@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # ----------------------------------------------------------------------------
 # This is a simple data-generator for test-data. You can pass a delay as
-# first argument. The default delay is 0.01 seconds.
+# first argument. The default delay is 0 seconds.
 #
 # Author: Bernhard Bablok
 # License: GPL3
@@ -13,7 +13,7 @@
 
 import sys, time, math
 
-delay = float(sys.argv[1]) if len(sys.argv) > 1 else 0.01
+delay = float(sys.argv[1]) if len(sys.argv) > 1 else 0
 y = [None,None]
 
 t0 = time.perf_counter()
