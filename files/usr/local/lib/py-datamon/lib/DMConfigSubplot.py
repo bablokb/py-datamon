@@ -26,6 +26,5 @@ class DMConfigSubplot(types.SimpleNamespace):
     super(DMConfigSubplot,self).__init__(**conf)
 
     # parse configuration for y-values
-    self.msg("DMConfigSubplot: parsing config for %d y-values" % len(self.y))
-    self._y = [DMConfigValue(app,y) for y in self.y]
-    del self.y
+    self.msg("DMConfigSubplot: parsing config for %d y-values" % len(self.values))
+    self.values = [DMConfigValue(app,value) for value in self.values]
