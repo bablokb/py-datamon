@@ -32,10 +32,13 @@ class DMConfigPlot(types.SimpleNamespace):
 
     # parse configuration for subplots
     self.msg("DMConfigPlot: parsing config for %d subplots" % len(self.plots))
-    self._subplots = [DMConfigSubplot(app,plot) for plot in self.plots]
-    del self.plots
+    self.plots = [DMConfigSubplot(app,plot) for plot in self.plots]
+
+    # set x-axis
+    self.x = types.SimpleNamespace(**self.x)
 
     self._get_layout()
+    self.msg("DMConfigPlot: subplot-layout is %dx%d" % (self.rows,self.cols))
 
   # --- calculate layout   ---------------------------------------------------
 
@@ -43,4 +46,4 @@ class DMConfigPlot(types.SimpleNamespace):
     """ calculate layout """
 
     if not hasattr(self,"rows"):
-      self.rows = math.ceil(len(self._subplots)/self.cols)
+      self.rows = math.ceil(len(self.plots)/self.cols)
