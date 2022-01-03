@@ -34,11 +34,16 @@ class DMPlot:
     """ plot the data """
 
     # define grid of plots
-    fig, axs = plt.subplots(nrows=2, ncols=1)
+    fig, axs = plt.subplots(nrows=self._config.rows, ncols=self._config.cols,
+                            squeeze=False)
 
     # add data to plots
-    axs[0].plot(self._data[0],self._data[1])
-    axs[1].plot(self._data[0],self._data[2])
+    pos = [[r,c] for r in range(self._config.rows)
+                                            for c in range(self._config.cols)]
+    for [r,c],cfg in zip(pos,self._config.plots):
+      self.msg("DMPLot: plotting subplot[%d][%d]" % (r,c))
+      for value in cfg.values:
+        axs[r][c].plot(self._data[self._config.x.col],self._data[value.col])
 
     # show plot
     plt.show()
