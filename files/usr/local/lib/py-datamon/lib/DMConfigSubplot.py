@@ -20,7 +20,8 @@ class DMConfigSubplot(types.SimpleNamespace):
     self.msg = app.msg
 
     # set defaults
-    self.title = "Default Title"
+    self.title   = ""
+    self.options = {}
 
     # override with data from config-file
     super(DMConfigSubplot,self).__init__(**conf)

@@ -19,6 +19,8 @@ class DMConfigValue(types.SimpleNamespace):
     self.msg = app.msg
 
     # set defaults
+    self.label   = ""
+    self.options = {}
 
     # override with data from config-file
     super(DMConfigValue,self).__init__(**conf)
