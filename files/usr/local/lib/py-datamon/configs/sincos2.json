@@ -1,28 +1,14 @@
-{"graphs": [
-  { "width": 600,
-    "height": 400,
-    "title":  "two plots: sin(x) and cos(x)",
-    "x": {"col":   0,
-          "label": "time"},
-    "y": [{"col":   1,
-           "label": "sin(x)",
-           "type":  "line",
-           "color": "blue"
-          }         
-         ]
-  },
-  { "width": 600,
-    "height": 400,
-    "title":  "two plots: sin(x) and cos(x)",
-    "x": {"col":   0,
-          "label": "time"},
-    "y": [
-          {"col":   2,
-           "label": "cos(x)",
-           "type":  "line",
-           "color": "red"
-          }         
-         ]
-  }
- ]
+{
+  "width": 600,
+  "height": 400,
+  "title":  "two plots: sin(x) and cos(x)",
+  "x": {"col":   0, "label": "time"},
+  "plots": [
+    {"values": [{"col":   1, "label": "sin(x)", "color": "blue"}]},
+    {"values": [{"col":   2, 
+                 "label": { "text": "cos(x)", "color": "red"},
+                 "color": "red" }
+               ]
+    }
+  ]
 }
