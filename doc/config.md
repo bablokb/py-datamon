@@ -1,5 +1,5 @@
-Graph Configuration
-===================
+Plot Configuration
+==================
 
 Overview
 --------
@@ -7,7 +7,10 @@ Overview
 The program expects data in CSV-format and will display the data
 in 1..n subplots, each with a shared x-value and multiple y-values.
 
-The configuration will map columns to subplots and x/y-values.
+The configuration will map columns to subplots and x/y-values and describe
+the rendering of the plots (axes, legends and so on). Please browse through
+the samples in `files/usr/local/lib/py-datamon/configs`.
+
 
 The configuration-file must contain a json-structure with the description
 of all subplots:
@@ -18,11 +21,12 @@ of all subplots:
      "rows":    <number of rows, optional, default: len(plots)>,
      "cols":    <number of cols, optional, default: 1>,
      "options": <dict, kw_args for matplotlib.pyplot.subplots()>, 
-     "x":      <value-definition>
-     "plots":  [plot_1,
-                plot_2, ...
-                plot_n
-               ]
+     "x":       <value-definition>
+     "legend"   <optional, kw_args for matplotlib.pyplot.legend()>
+     "plots":   [plot_1,
+                 plot_2, ...
+                 plot_n
+                ]
     }
 
 The most basic configuration would be something like this:
@@ -42,8 +46,12 @@ Subplots
 Each subplot is a dictionary:
 
     {"title": <"text", optional>,
+     "legend"   <optional, kw_args for matplotlib.pyplot.legend()>
      "values": [value_definition_1,...,value_definition_n],
     }
+
+A legend-definition for a subplot overrides the legend-definition on
+plot level.
 
 
 Value-Definition
