@@ -4,12 +4,13 @@
   "title":  "single plot: sin(x) and cos(x)",
   "x": {"col": 0, "label": "time"},
   "plots": [
-     {"values": [{"col": 1, "label": "sin(x)"},
+     {"legend": {"bbox_to_anchor": [1,1], "loc": "upper left"},
+      "values": [{"col": 1, "label": "sin(x)"},
                  {"col": 2, "label": "cos(x)"},
-                 {"col": 3, "label": "cos(x)"},
-                 {"col": 4, "label": "cos(x)"},
-                 {"col": 5, "label": "cos(x)"},
-                 {"col": 6, "label": "cos(x)"}
+                 {"col": 3, "label": "sin(x)+cos(x)"},
+                 {"col": 4, "label": "sin(x)+N(0,0.15)"},
+                 {"col": 5, "label": "cos(x)+N(0,0.15)"},
+                 {"col": 6, "label": "sin(x)+cos(x)+N(0,0.15)"}
                 ]
      }
   ]
