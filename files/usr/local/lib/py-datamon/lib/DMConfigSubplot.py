@@ -23,6 +23,7 @@ class DMConfigSubplot(types.SimpleNamespace):
     self.title      = ""
     self.title_opts = {}
     self.options    = {}
+    self.legend     = {"loc": "best"}
 
     # override with data from config-file
     super(DMConfigSubplot,self).__init__(**conf)
