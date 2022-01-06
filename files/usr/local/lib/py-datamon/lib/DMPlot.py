@@ -36,7 +36,7 @@ class DMPlot:
     # define grid of plots
     fig, axs = plt.subplots(nrows=self._config.rows, ncols=self._config.cols,
                             squeeze=False,**self._config.options)
-    fig.suptitle(self._config.title)
+    fig.suptitle(self._config.title,**self._config.title_opts)
 
     # add data to plots
     pos = [[r,c] for r in range(self._config.rows)
@@ -46,9 +46,9 @@ class DMPlot:
       for value in cfg.values:
         axs[r][c].plot(self._data[self._config.x.col],self._data[value.col],
                        **value.options)
-        axs[r][c].set_title(cfg.title)
-        axs[r][c].set_xlabel(self._config.x.label)
-        axs[r][c].set_ylabel(value.label)
+        axs[r][c].set_title(cfg.title,**cfg.title_opts)
+        axs[r][c].set_xlabel(self._config.x.label,**self._config.x.label_opts)
+        axs[r][c].set_ylabel(value.label,**value.label_opts)
 
     # show plot
     plt.show()
