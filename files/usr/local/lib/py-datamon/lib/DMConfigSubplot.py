@@ -20,8 +20,9 @@ class DMConfigSubplot(types.SimpleNamespace):
     self.msg = app.msg
 
     # set defaults
-    self.title   = ""
-    self.options = {}
+    self.title      = ""
+    self.title_opts = {}
+    self.options    = {}
 
     # override with data from config-file
     super(DMConfigSubplot,self).__init__(**conf)
@@ -29,3 +30,8 @@ class DMConfigSubplot(types.SimpleNamespace):
     # parse configuration for y-values
     self.msg("DMConfigSubplot: parsing config for %d y-values" % len(self.values))
     self.values = [DMConfigValue(app,value) for value in self.values]
+
+    if isinstance(self.title,dict):
+      self.title_opts = self.title
+      self.title      = self.title_opts['text']
+      del self.title_opts['text']

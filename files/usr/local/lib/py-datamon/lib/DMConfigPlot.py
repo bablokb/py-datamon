@@ -24,9 +24,10 @@ class DMConfigPlot(types.SimpleNamespace):
     self.msg = app.msg
     
     # set defaults
-    self.title   = ""
-    self.options = {}
-    self.cols    = 1
+    self.title      = ""
+    self.title_opts = {}
+    self.options    = {}
+    self.cols       = 1
 
     # override with data from config-file
     super(DMConfigPlot,self).__init__(**conf)
@@ -40,6 +41,16 @@ class DMConfigPlot(types.SimpleNamespace):
 
     self._get_layout()
     self.msg("DMConfigPlot: subplot-layout is %dx%d" % (self.rows,self.cols))
+
+    # convert special attributes to options
+    if hasattr(self,"width") and hasattr(self,"height"):
+      self.options['figsize'] = (self.width/100,self.height/100)
+      self.options['dpi']     = 100
+
+    if isinstance(self.title,dict):
+      self.title_opts = self.title
+      self.title      = self.title_opts['text']
+      del self.title_opts['text']
 
   # --- calculate layout   ---------------------------------------------------
 
