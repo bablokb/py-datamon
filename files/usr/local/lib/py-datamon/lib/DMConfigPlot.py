@@ -10,7 +10,7 @@
 # ----------------------------------------------------------------------------
 
 import types, math
-from lib import DMConfigSubplot
+from lib import DMConfigSubplot, DMConfigValue
 
 # --- configuration-object for plots   ---------------------------------------
 
@@ -24,8 +24,9 @@ class DMConfigPlot(types.SimpleNamespace):
     self.msg = app.msg
     
     # set defaults
-    self.title = "Default Title"
-    self.cols  = 1
+    self.title   = ""
+    self.options = {}
+    self.cols    = 1
 
     # override with data from config-file
     super(DMConfigPlot,self).__init__(**conf)
@@ -35,7 +36,7 @@ class DMConfigPlot(types.SimpleNamespace):
     self.plots = [DMConfigSubplot(app,plot) for plot in self.plots]
 
     # set x-axis
-    self.x = types.SimpleNamespace(**self.x)
+    self.x = DMConfigValue(app,self.x)
 
     self._get_layout()
     self.msg("DMConfigPlot: subplot-layout is %dx%d" % (self.rows,self.cols))
