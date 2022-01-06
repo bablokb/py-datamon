@@ -26,7 +26,7 @@ class DMConfigPlot(types.SimpleNamespace):
     # set defaults
     self.title      = ""
     self.title_opts = {}
-    self.options    = {}
+    self.options    = {"constrained_layout": True}
     self.cols       = 1
 
     # override with data from config-file
