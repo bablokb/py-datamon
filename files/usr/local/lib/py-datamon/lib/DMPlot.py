@@ -46,9 +46,11 @@ class DMPlot:
       axs[r][c].set_xlabel(self._config.x.label,**self._config.x.label_opts)
       for value in cfg.values:
         axs[r][c].plot(self._data[self._config.x.col],self._data[value.col],
+                       label = value.label,
                        **value.options)
         axs[r][c].set_title(cfg.title,**cfg.title_opts)
         axs[r][c].set_ylabel(value.label,**value.label_opts)
+        axs[r][c].legend(**cfg.legend)
 
     # show plot
     plt.show()
