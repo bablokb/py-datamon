@@ -1,0 +1,14 @@
+{
+  "width": 600,
+  "height": 800,
+  "title":  "six plots: sin(x) and cos(x)",
+  "x": {"col":   0, "label": "time"},
+  "plots": [
+    {"values": [{"col":   1, "label": "sin(x)"}]},
+    {"values": [{"col":   2, "label": "cos(x)"}]},
+    {"values": [{"col":   3, "label": "sin(x)+cos(x)"}]},
+    {"values": [{"col":   4, "label": "sin(x)+N"}]},
+    {"values": [{"col":   5, "label": "cos(x)+N"}]},
+    {"values": [{"col":   6, "label": "sin(x)+cos(x)+N"}]}
+   ]
+}

@@ -1,0 +1,30 @@
+{ "cols": 2,
+  "width": 1000,
+  "height": 800,
+  "title":  "Various plots for sin(x) and cos(x)",
+  "x": {"col":   0, "label": "time (ms)"},
+  "plots": [
+    {"values": [{"col":   1, "label": "y", 
+                 "options": {"color": "red"}
+                }],
+     "title": "sin(x)"
+    },
+    {"values": [{"col":   4, "label": "y", "type":  "line", "color": "green"}],
+     "title": "sin(x)+N(0,0.15)"
+    },
+    {"values": [{"col":   2, "label": "y", "type":  "line"}],
+     "title": "cos(x)"
+    },
+    {"values": [{"col":   5, "label": "y", "type":  "line"}],
+     "title": "cos(x)+N(0,0.15)"
+    },
+    {"values": [{"col":   3, "label": "y", "type":  "line"}],
+     "title": "sin(x)+cos(x)"
+    },
+    {"values": [{"col":   6,
+                 "label": {"text": "y", "color": "pink"}, 
+                 "type":  "line", "color": "red" }],
+     "title": "sin(x)+cos(x)+N(0,0.15)"
+    }
+   ]
+}

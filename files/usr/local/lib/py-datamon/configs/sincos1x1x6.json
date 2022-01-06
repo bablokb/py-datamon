@@ -1,0 +1,16 @@
+{
+  "width": 600,
+  "height": 400,
+  "title":  "single plot: sin(x) and cos(x)",
+  "x": {"col": 0, "label": "time"},
+  "plots": [
+     {"values": [{"col": 1, "label": "sin(x)"},
+                 {"col": 2, "label": "cos(x)"},
+                 {"col": 3, "label": "cos(x)"},
+                 {"col": 4, "label": "cos(x)"},
+                 {"col": 5, "label": "cos(x)"},
+                 {"col": 6, "label": "cos(x)"}
+                ]
+     }
+  ]
+}
