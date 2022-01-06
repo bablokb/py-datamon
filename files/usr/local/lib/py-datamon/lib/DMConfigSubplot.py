@@ -15,7 +15,7 @@ from lib import DMConfigValue
 # --- configuration-object for subplots   ------------------------------------
 
 class DMConfigSubplot(types.SimpleNamespace):
-  def __init__(self,app,conf):
+  def __init__(self,app,cfg_plot,conf):
 
     self.msg = app.msg
 
@@ -23,7 +23,7 @@ class DMConfigSubplot(types.SimpleNamespace):
     self.title      = ""
     self.title_opts = {}
     self.options    = {}
-    self.legend     = {"loc": "best"}
+    self.legend     = cfg_plot.legend
 
     # override with data from config-file
     super(DMConfigSubplot,self).__init__(**conf)

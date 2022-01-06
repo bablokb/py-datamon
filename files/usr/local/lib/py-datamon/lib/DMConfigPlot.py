@@ -27,6 +27,7 @@ class DMConfigPlot(types.SimpleNamespace):
     self.title      = ""
     self.title_opts = {}
     self.options    = {"constrained_layout": True}
+    self.legend     = {"loc": "best"}
     self.cols       = 1
 
     # override with data from config-file
@@ -34,7 +35,7 @@ class DMConfigPlot(types.SimpleNamespace):
 
     # parse configuration for subplots
     self.msg("DMConfigPlot: parsing config for %d subplots" % len(self.plots))
-    self.plots = [DMConfigSubplot(app,plot) for plot in self.plots]
+    self.plots = [DMConfigSubplot(app,self,plot) for plot in self.plots]
 
     # set x-axis
     self.x = DMConfigValue(app,self.x)
