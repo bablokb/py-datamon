@@ -11,21 +11,20 @@
      "legend": {"loc": "best", "labelcolor": "red"},
      "title": "sin(x)"
     },
-    {"values": [{"col":   4, "label": "y", "type":  "line", "color": "green"}],
+    {"values": [{"col":   4, "label": "y", "color": "green"}],
      "title": "sin(x)+N(0,0.15)"
     },
-    {"values": [{"col":   2, "label": "y", "type":  "line"}],
+    {"values": [{"col":   2, "label": "y"}],
      "title": "cos(x)"
     },
-    {"values": [{"col":   5, "label": "y", "type":  "line"}],
+    {"values": [{"col":   5, "label": "y"}],
      "title": "cos(x)+N(0,0.15)"
     },
-    {"values": [{"col":   3, "label": "y", "type":  "line"}],
+    {"values": [{"col":   3, "label": "y"}],
      "title": "sin(x)+cos(x)"
     },
     {"values": [{"col":   6,
-                 "label": {"text": "y", "color": "pink"}, 
-                 "type":  "line", "color": "red" }],
+                 "label": {"text": "y", "color": "pink"}, "color": "red" }],
      "title": "sin(x)+cos(x)+N(0,0.15)"
     }
    ]
