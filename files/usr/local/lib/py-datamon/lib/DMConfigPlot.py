@@ -10,7 +10,7 @@
 # ----------------------------------------------------------------------------
 
 import types, math
-from lib import DMConfigSubplot, DMConfigValue
+from lib import DMConfigSubplot, DMConfigValue, DMConfigAxis
 
 # --- configuration-object for plots   ---------------------------------------
 
@@ -29,16 +29,20 @@ class DMConfigPlot(types.SimpleNamespace):
     self.options    = {"constrained_layout": True}
     self.legend     = {"loc": "best"}
     self.cols       = 1
+    self.xaxis      = {"text": "time (ms)"}
+    self.yaxis      = {"text": "value"}
 
     # override with data from config-file
     super(DMConfigPlot,self).__init__(**conf)
 
+    # set axis
+    self.x     = types.SimpleNamespace(**self.x)
+    self.xaxis = DMConfigAxis(app,self.xaxis)
+    self.yaxis = DMConfigAxis(app,self.yaxis)
+
     # parse configuration for subplots
     self.msg("DMConfigPlot: parsing config for %d subplots" % len(self.plots))
     self.plots = [DMConfigSubplot(app,self,plot) for plot in self.plots]
-
-    # set x-axis
-    self.x = DMConfigValue(app,self.x)
 
     self._get_layout()
     self.msg("DMConfigPlot: subplot-layout is %dx%d" % (self.rows,self.cols))

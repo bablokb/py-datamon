@@ -41,19 +41,35 @@ class DMPlot:
     # add data to plots
     pos = [[r,c] for r in range(self._config.rows)
                                             for c in range(self._config.cols)]
-    for [r,c],cfg in zip(pos,self._config.plots):
-      self.msg("DMPLot: plotting subplot[%d][%d]" % (r,c))
-      axs[r][c].set_xlabel(self._config.x.label,**self._config.x.label_opts)
 
-      for value in cfg.values:
-        axs[r][c].plot(self._data[self._config.x.col],self._data[value.col],
+    # for every subplot...
+    for [r,c],plot_cfg in zip(pos,self._config.plots):
+      self.msg("DMPLot: plotting subplot[%d][%d]" % (r,c))
+
+      # ... configure axis
+      if plot_cfg.xaxis.min:
+        axs[r][c].set_xlim(left=plot_cfg.xaxis.min)
+      if plot_cfg.xaxis.max:
+        axs[r][c].set_xlim(right=plot_cfg.xaxis.max)
+      if plot_cfg.yaxis.min:
+        axs[r][c].set_ylim(bottom=plot_cfg.yaxis.min)
+      if plot_cfg.yaxis.max:
+        axs[r][c].set_ylim(top=plot_cfg.yaxis.max)
+
+      # ... and plot axis-label
+      axs[r][c].set_xlabel(plot_cfg.xaxis.text,**plot_cfg.xaxis.text_opts)
+      axs[r][c].set_ylabel(plot_cfg.yaxis.text,**plot_cfg.yaxis.text_opts)
+
+      # ... plot 1..n y-values
+      for value in plot_cfg.values:
+        axs[r][c].plot(self._data[plot_cfg.x.col],self._data[value.col],
                        label = value.label,
                        **value.options)
-        axs[r][c].set_title(cfg.title,**cfg.title_opts)
-        axs[r][c].set_ylabel(value.label,**value.label_opts)
+        axs[r][c].set_title(plot_cfg.title,**plot_cfg.title_opts)
 
-      if cfg.legend["loc"]:
-        axs[r][c].legend(**cfg.legend)
+      # ... plot legend
+      if plot_cfg.legend["loc"]:
+        axs[r][c].legend(**plot_cfg.legend)
 
     # show plot
     plt.show()

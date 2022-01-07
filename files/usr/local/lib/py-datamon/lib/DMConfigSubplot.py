@@ -10,7 +10,7 @@
 # ----------------------------------------------------------------------------
 
 import types
-from lib import DMConfigValue
+from lib import DMConfigValue, DMConfigAxis
 
 # --- configuration-object for subplots   ------------------------------------
 
@@ -24,9 +24,20 @@ class DMConfigSubplot(types.SimpleNamespace):
     self.title_opts = {}
     self.options    = {}
     self.legend     = cfg_plot.legend
+    self.x          = cfg_plot.x
+    self.xaxis      = cfg_plot.xaxis
+    self.yaxis      = cfg_plot.yaxis
 
     # override with data from config-file
     super(DMConfigSubplot,self).__init__(**conf)
+
+    # fix attributes if defaults were overridden
+    if isinstance(self.x,dict):
+      self.x  = types.SimpleNamespace(**self.x)
+    if isinstance(self.xaxis,dict):
+      self.xaxis = DMConfigAxis(app,self.xaxis)
+    if isinstance(self.yaxis,dict):
+      self.yaxis = DMConfigAxis(app,self.yaxis)
 
     # parse configuration for y-values
     self.msg("DMConfigSubplot: parsing config for %d y-values" % len(self.values))
