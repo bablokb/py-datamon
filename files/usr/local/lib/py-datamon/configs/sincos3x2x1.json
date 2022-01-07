@@ -2,29 +2,36 @@
   "width": 1000,
   "height": 800,
   "title":  "Various plots for sin(x) and cos(x)",
-  "x": {"col":   0, "label": "time (ms)"},
+  "x": {"col":   0},
+  "xaxis": {"text": "time (ms)", "max": 30},
+  "yaxis": {"text": "y"},
   "legend": {"loc": null},
   "plots": [
     {"values": [{"col":   1, "label": "sin(x)",
                  "options": {"color": "red"}
                 }],
+     "xaxis": {"text": "Time (ms)"},
+     "yaxis": {"text": "sin(x)", "min": -2, "max": 2},
      "legend": {"loc": "best", "labelcolor": "red"},
      "title": "sin(x)"
     },
-    {"values": [{"col":   4, "label": "y", "color": "green"}],
+    {"values": [{"col":   4, "label": "sin(x)+N(0,0.15)", "color": "green"}],
      "title": "sin(x)+N(0,0.15)"
     },
-    {"values": [{"col":   2, "label": "y"}],
-     "title": "cos(x)"
+    {"values": [{"col":   2, "label": "cos(x)"}],
+     "xaxis":  {"text": "Time (ms)", "max": 15},
+     "title":  "cos(x)"
     },
-    {"values": [{"col":   5, "label": "y"}],
+    {"values": [{"col":   5, "label": "cos(x)+N(0,0.15)"}],
      "title": "cos(x)+N(0,0.15)"
     },
-    {"values": [{"col":   3, "label": "y"}],
+    {"values": [{"col":   3, "label": "sin(x)+cos(x)"}],
+     "xaxis": {"text": "Time (ms)", "min": 10, "max": 25},
      "title": "sin(x)+cos(x)"
     },
     {"values": [{"col":   6,
-                 "label": {"text": "y", "color": "pink"}, "color": "red" }],
+                 "label": {"text": "sin(x)+cos(x)+N(0,0.15)", "color": "pink"},
+                 "color": "red" }],
      "title": "sin(x)+cos(x)+N(0,0.15)"
     }
    ]
