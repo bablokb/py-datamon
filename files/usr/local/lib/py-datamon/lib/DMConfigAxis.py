@@ -26,7 +26,10 @@ class DMConfigAxis(types.SimpleNamespace):
     self.options   = {}
 
     # override with data from config-file
-    super(DMConfigAxis,self).__init__(**conf)
+    if isinstance(conf,dict):
+      super(DMConfigAxis,self).__init__(**conf)
+    else:
+      super(DMConfigAxis,self).__init__(text=conf)
 
     if isinstance(self.text,dict):
       self.text_opts = self.text
