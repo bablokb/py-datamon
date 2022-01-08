@@ -34,9 +34,9 @@ class DMConfigSubplot(types.SimpleNamespace):
     # fix attributes if defaults were overridden
     if isinstance(self.x,dict):
       self.x  = types.SimpleNamespace(**self.x)
-    if isinstance(self.xaxis,dict):
+    if not isinstance(self.xaxis,DMConfigAxis):
       self.xaxis = DMConfigAxis(app,self.xaxis)
-    if isinstance(self.yaxis,dict):
+    if not isinstance(self.yaxis,DMConfigAxis):
       self.yaxis = DMConfigAxis(app,self.yaxis)
 
     # parse configuration for y-values
