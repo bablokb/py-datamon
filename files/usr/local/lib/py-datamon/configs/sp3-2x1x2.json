@@ -1,0 +1,19 @@
+{ "cols": 1,
+  "width": 1600,
+  "height": 900,
+  "title":  "Smartpower 3 - Ch0 vs. Ch1",
+  "x": {"col":   0},
+  "xaxis": "time (ms)",
+  "plots": [
+    {"values": [{"col":   6, "label": "Ch0 Current"},
+                {"col":  11, "label": "Ch1 Current"}],
+     "yaxis": "mA",
+     "title": "Current"
+    },
+    {"values": [{"col":   7, "label": "Ch0 Power"},
+                {"col":  12, "label": "Ch1 Power"}],
+     "yaxis": "mW",
+     "title": "Power"
+    }
+   ]
+}
