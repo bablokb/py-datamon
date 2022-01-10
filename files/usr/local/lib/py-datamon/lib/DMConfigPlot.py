@@ -31,6 +31,8 @@ class DMConfigPlot(types.SimpleNamespace):
     self.cols       = 1
     self.xaxis      = {"text": "time (ms)"}
     self.yaxis      = {"text": "value"}
+    self.grid       = True
+    self.grid_opts  = {"which": "both","axis": "both"}
 
     # override with data from config-file
     super(DMConfigPlot,self).__init__(**conf)

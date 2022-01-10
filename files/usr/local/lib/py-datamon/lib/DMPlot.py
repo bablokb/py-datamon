@@ -60,6 +60,9 @@ class DMPlot:
       axs[r][c].set_xlabel(plot_cfg.xaxis.text,**plot_cfg.xaxis.text_opts)
       axs[r][c].set_ylabel(plot_cfg.yaxis.text,**plot_cfg.yaxis.text_opts)
 
+      # ... and plot grid
+      axs[r][c].grid(visible=plot_cfg.grid,**plot_cfg.grid_opts)
+
       # ... plot 1..n y-values
       for value in plot_cfg.values:
         axs[r][c].plot(self._data[plot_cfg.x.col],self._data[value.col],

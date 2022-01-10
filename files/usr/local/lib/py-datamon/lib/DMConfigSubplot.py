@@ -27,6 +27,8 @@ class DMConfigSubplot(types.SimpleNamespace):
     self.x          = cfg_plot.x
     self.xaxis      = cfg_plot.xaxis
     self.yaxis      = cfg_plot.yaxis
+    self.grid       = cfg_plot.grid
+    self.grid_opts  = cfg_plot.grid_opts
 
     # override with data from config-file
     super(DMConfigSubplot,self).__init__(**conf)
@@ -47,3 +49,8 @@ class DMConfigSubplot(types.SimpleNamespace):
       self.title_opts = self.title
       self.title      = self.title_opts['text']
       del self.title_opts['text']
+
+    if isinstance(self.grid,dict):
+      self.grid_opts = self.grid
+      self.grid      = self.grid_opts['visible']
+      del self.grid_opts['visible']
