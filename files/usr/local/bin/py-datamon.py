@@ -18,7 +18,7 @@
 # ----------------------------------------------------------------------------
 
 import locale, time, os, sys, json, traceback, signal, threading, select
-import queue
+import queue, csv
 from   argparse import ArgumentParser
 from   pathlib  import Path
 
@@ -99,6 +99,18 @@ class App:
       plotter = DMPlot(self,self.config,data=self._data)
       plotter.plot()
 
+  # --- get delimiter of csv-data   ------------------------------------------
+
+  def _get_delim(self,file=None,line=None):
+    """ guess delimiter by sniffing the given line """
+
+    if file is None:
+      return csv.Sniffer().sniff(line).delimiter
+    else:
+      with open(file,'rt') as csvfile:
+        line = csvfile.readline()
+        return self._get_delim(line=line)
+
   # --- read data   ----------------------------------------------------------
 
   def _read(self):
@@ -107,7 +119,9 @@ class App:
     if self.input != "-" and Path(self.input).is_file():
       # just import the csv-data directly
       self.msg("App: reading data from %s" % self.input)
-      self._data = pd.read_csv(self.input,header=None)
+      delim = self._get_delim(file=self.input)
+      self.msg("App: delimiter is: '%s'" % delim)
+      self._data = pd.read_csv(self.input,header=None,sep=delim)
       if any(self._data.iloc[0].apply(lambda x: isinstance(x, str))):
         self.msg("App: dropping csv-header")
         self._data = self._data[1:].reset_index(drop=True)
