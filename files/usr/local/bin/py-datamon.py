@@ -129,6 +129,7 @@ class App:
         print("-"*75)
         print(self._data.head(10))
         print("-"*75)
+      self._data = self._data.to_numpy()
     else:
       # use a reader-thread if we are reading from a pipe or device
       self.is_live = True

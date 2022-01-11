@@ -65,7 +65,8 @@ class DMPlot:
 
       # ... plot 1..n y-values
       for value in plot_cfg.values:
-        axs[r][c].plot(self._data[plot_cfg.x.col],self._data[value.col],
+        axs[r][c].plot(self._data[:,plot_cfg.x.col],
+                       self._data[:,value.col],
                        label = value.label,
                        **value.options)
         axs[r][c].set_title(plot_cfg.title,**plot_cfg.title_opts)
