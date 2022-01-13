@@ -18,11 +18,14 @@ of all subplots:
     {"width":   <number, in pixel, optional, width needs height>,
      "height":  <number, in pixel, optional, height needs width>,
      "title":   <"text", optional>,
-     "rows":    <number of rows, optional, default: len(plots)>,
-     "cols":    <number of cols, optional, default: 1>,
+     "rows":    <number of subplot-rows, optional, default: len(plots)>,
+     "cols":    <number of subplot-cols, optional, default: 1>,
      "options": <dict, kw_args for matplotlib.pyplot.subplots()>, 
-     "x":       <value-definition>
-     "legend"   <optional, kw_args for matplotlib.pyplot.legend()>
+     "x":       <optional, x-value-definition>,
+     "xaxis":   <axis-definition>,
+     "yaxis":   <axis-definition, optional>,
+     "grid":    <optional, see matplotlib.pyplot.grid()>,
+     "legend"   <optional, kw_args for matplotlib.pyplot.legend()>,
      "plots":   [plot_1,
                  plot_2, ...
                  plot_n
@@ -45,13 +48,61 @@ Subplots
 
 Each subplot is a dictionary:
 
-    {"title": <"text", optional>,
-     "legend"   <optional, kw_args for matplotlib.pyplot.legend()>
+    {"title":  <"text", optional>,
+     "legend": <optional, kw_args for matplotlib.pyplot.legend()>
+     "xaxis":  <axis-definition>
+     "yaxis":  <axis-definition, optional>
+     "grid":    <optional, see matplotlib.pyplot.grid()>
      "values": [value_definition_1,...,value_definition_n],
     }
 
 A legend-definition for a subplot overrides the legend-definition on
-plot level.
+plot level. The same holds true for grid, xaxis and yaxis.
+
+To disable legends, use
+
+    "legend": {"loc": null}
+
+
+Axis-Definition
+---------------
+
+The simplified form is:
+
+    "yaxis": "myaxis"
+
+You can also pass minimum and maximum:
+
+    "yaxis": {"text": "myaxis", "min": 0, "max": 100}
+
+
+Grid-Defintion
+--------------
+
+Simple form:
+
+    "grid": true|false
+
+Extended form:
+
+    "grid": {"visible": true|false,
+             <additional args to matplotlib.pyplot.grid()>}
+
+
+X-Value-Definition
+------------------
+
+The definition of the x-value is optional and defaults to the
+first column (i.e. column zero) with label "time".
+
+Setting "normalize" to true shifts the data to the left, so the time
+axis starts at 0. An optional "scale"-value will scale the data, e.g.
+to convert milliseconds to seconds (scale=0.001).
+
+    "x": {"col":       <optional, data-column x-value, default: 0>,
+          "label":     <optional, default: "time">,
+          "normalize": <optional, default false>,
+          "scale":     <optional, default 1>
 
 
 Value-Definition
@@ -61,7 +112,8 @@ The values-definition is a dictionary:
 
     {"col":   <column-number within csv-data>,
      "label": <"text", optional>,
-     "color": <line-color>
+     "color": <line-color, optional>,
+     "options": <optional, kw_args for matplotlib.pyplot.plot()>
     }
 
 
