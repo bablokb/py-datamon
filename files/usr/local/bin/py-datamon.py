@@ -130,6 +130,8 @@ class App:
         print(self._data.head(10))
         print("-"*75)
       self._data = self._data.to_numpy()
+      self.config.il = 0                      # low-index
+      self.config.ih = self._data.shape[0]    # high-index of data
     else:
       # use a reader-thread if we are reading from a pipe or device
       self.is_live = True
