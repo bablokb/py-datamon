@@ -20,7 +20,8 @@
      "title": "sin(x)+N(0,0.15)",
      "grid": true
     },
-    {"values": [{"col":   2, "label": "cos(x)"}],
+    {"values": [{"col":   2, "label": "cos(x)",
+                 "options": {"marker": "2", "linestyle": ":"}}],
      "xaxis":  {"text": "Time (ms)", "max": 15},
      "title":  "cos(x)"
     },
