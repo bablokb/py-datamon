@@ -10,7 +10,7 @@
 # ----------------------------------------------------------------------------
 
 import types, math
-from lib import DMConfigSubplot, DMConfigValue, DMConfigAxis
+from lib import DMConfigSubplot, DMConfigValue, DMConfigAxis, DMConfigX
 
 # --- configuration-object for plots   ---------------------------------------
 
@@ -29,6 +29,7 @@ class DMConfigPlot(types.SimpleNamespace):
     self.options    = {"constrained_layout": True}
     self.legend     = {"loc": "best"}
     self.cols       = 1
+    self.x          = {}
     self.xaxis      = {"text": "time (ms)"}
     self.yaxis      = {"text": "value"}
     self.grid       = True
@@ -38,7 +39,7 @@ class DMConfigPlot(types.SimpleNamespace):
     super(DMConfigPlot,self).__init__(**conf)
 
     # set axis
-    self.x     = types.SimpleNamespace(**self.x)
+    self.x     = DMConfigX(app,self.x)
     self.xaxis = DMConfigAxis(app,self.xaxis)
     self.yaxis = DMConfigAxis(app,self.yaxis)
 
