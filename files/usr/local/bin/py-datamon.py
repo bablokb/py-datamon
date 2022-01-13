@@ -135,13 +135,13 @@ class App:
     else:
       # use a reader-thread if we are reading from a pipe or device
       self.is_live = True
-      reader_thread = threading.Thread(target=self._read_data)
+      reader_thread = threading.Thread(target=self._read_continuous)
       reader_thread.start()
       self._threads.append(reader_thread)
 
   # --- read data   ----------------------------------------------------------
 
-  def _read_data(self):
+  def _read_continuous(self):
     """ read data and add it to a queue """
 
     # make sure the open call does not block
