@@ -10,6 +10,7 @@
 #
 # ----------------------------------------------------------------------------
 
+from . DMConfigX       import DMConfigX       as DMConfigX
 from . DMConfigAxis    import DMConfigAxis    as DMConfigAxis
 from . DMConfigValue   import DMConfigValue   as DMConfigValue
 from . DMConfigSubplot import DMConfigSubplot as DMConfigSubplot
