@@ -121,17 +121,27 @@ class App:
       self.msg("App: reading data from %s" % self.input)
       delim = self._get_delim(file=self.input)
       self.msg("App: delimiter is: '%s'" % delim)
+
+      # using pandas to read the data, because it is more robust
+      # then np.genfromtxt ...
       self._data = pd.read_csv(self.input,header=None,sep=delim)
       if any(self._data.iloc[0].apply(lambda x: isinstance(x, str))):
         self.msg("App: dropping csv-header")
         self._data = self._data[1:].reset_index(drop=True)
       if self.debug:
+        self.msg("App: total data-rows: %d" % self._data.shape[0])
         print("-"*75)
         print(self._data.head(10))
         print("-"*75)
+
+      # ... but convert to numpy-array, because a dataframe is not
+      # thread-safe
       self._data = self._data.to_numpy()
-      self.config.il = 0                      # low-index
-      self.config.ih = self._data.shape[0]    # high-index of data
+
+      # set low/high indices (for csv-files, we use the complete data)
+      self.config.il = 0
+      self.config.ih = self._data.shape[0]
+
     else:
       # use a reader-thread if we are reading from a pipe or device
       self.is_live = True
