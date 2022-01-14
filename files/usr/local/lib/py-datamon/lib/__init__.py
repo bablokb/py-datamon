@@ -16,3 +16,4 @@ from . DMConfigValue   import DMConfigValue   as DMConfigValue
 from . DMConfigSubplot import DMConfigSubplot as DMConfigSubplot
 from . DMConfigPlot    import DMConfigPlot    as DMConfigPlot
 from . DMPlot          import DMPlot          as DMPlot
+from . DMData          import DMData          as DMData
