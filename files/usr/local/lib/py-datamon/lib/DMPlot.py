@@ -19,14 +19,13 @@ class DMPlot:
 
   # --- constructor   --------------------------------------------------------
 
-  def __init__(self,app,config,data=None,queue=None,stop_event=None):
+  def __init__(self,app,config,data=None,stop_event=None):
     """ constructor """
 
     self.msg         = app.msg
     self._config     = config
     self._data       = data
     self._x_low      = -1
-    self._queue      = queue
     self._stop_event = stop_event
 
   # --- scale and normalize x-axis data   ------------------------------------
@@ -84,8 +83,8 @@ class DMPlot:
 
       # ... plot 1..n y-values
       for value in plot_cfg.values:
-        axs[r][c].plot(self._data[self._config.il:self._config.ih,plot_cfg.x.col],
-                       self._data[self._config.il:self._config.ih,value.col],
+        axs[r][c].plot(self._data[plot_cfg.x.col],
+                       self._data[value.col],
                        label = value.label,
                        **value.options)
         axs[r][c].set_title(plot_cfg.title,**plot_cfg.title_opts)

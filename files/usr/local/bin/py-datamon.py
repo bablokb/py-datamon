@@ -18,18 +18,15 @@
 # ----------------------------------------------------------------------------
 
 import locale, time, os, sys, json, traceback, signal, threading, select
-import queue, csv
 from   argparse import ArgumentParser
 from   pathlib  import Path
-
-import pandas as pd
 
 # --- application imports   --------------------------------------------------
 
 libdir = Path(sys.argv[0]).parent / "../lib/py-datamon"
 sys.path.append(str(libdir))
 
-from lib import DMPlot, DMConfigPlot
+from lib import DMData, DMPlot, DMConfigPlot
 
 # --- application class   ----------------------------------------------------
 
@@ -45,10 +42,11 @@ class App:
     """ constructor """
 
     self.is_live     = False
+    self.debug       = False
 
     self._threads    = []
     self._stop_event = threading.Event()
-    self._data       = None
+    self._data       = DMData(self)
     parser = self._get_parser()
     parser.parse_args(namespace=self)
 
@@ -90,7 +88,7 @@ class App:
     """ plot the data """
 
     if self.is_live:
-      plotter = DMPlot(self,self.config,queue=self._data_queue,
+      plotter = DMPlot(self,self.config,data=self._data,
                                                  stop_event=self._stop_event)
       plotter_thread = threading.Thread(target=plotter.plot)
       plotter_thread.start()
@@ -99,18 +97,6 @@ class App:
       plotter = DMPlot(self,self.config,data=self._data)
       plotter.plot()
 
-  # --- get delimiter of csv-data   ------------------------------------------
-
-  def _get_delim(self,file=None,line=None):
-    """ guess delimiter by sniffing the given line """
-
-    if file is None:
-      return csv.Sniffer().sniff(line).delimiter
-    else:
-      with open(file,'rt') as csvfile:
-        line = csvfile.readline()
-        return self._get_delim(line=line)
-
   # --- read data   ----------------------------------------------------------
 
   def _read(self):
@@ -118,68 +104,12 @@ class App:
 
     if self.input != "-" and Path(self.input).is_file():
       # just import the csv-data directly
-      self.msg("App: reading data from %s" % self.input)
-      delim = self._get_delim(file=self.input)
-      self.msg("App: delimiter is: '%s'" % delim)
-
-      # using pandas to read the data, because it is more robust
-      # then np.genfromtxt ...
-      self._data = pd.read_csv(self.input,header=None,sep=delim)
-      if any(self._data.iloc[0].apply(lambda x: isinstance(x, str))):
-        self.msg("App: dropping csv-header")
-        self._data = self._data[1:].reset_index(drop=True)
-      if self.debug:
-        self.msg("App: total data-rows: %d" % self._data.shape[0])
-        print("-"*75)
-        print(self._data.head(10))
-        print("-"*75)
-
-      # ... but convert to numpy-array, because a dataframe is not
-      # thread-safe
-      self._data = self._data.to_numpy()
-
-      # set low/high indices (for csv-files, we use the complete data)
-      self.config.il = 0
-      self.config.ih = self._data.shape[0]
-
+      self._data.import_file(self.input)
     else:
       # use a reader-thread if we are reading from a pipe or device
       self.is_live = True
-      reader_thread = threading.Thread(target=self._read_continuous)
-      reader_thread.start()
+      reader_thread = self._data.start_reader(self.input,self._stop_event)
       self._threads.append(reader_thread)
-
-  # --- read data   ----------------------------------------------------------
-
-  def _read_continuous(self):
-    """ read data and add it to a queue """
-
-    # make sure the open call does not block
-    if self.input == "-":
-      self.msg("App: reading data from stdin")
-      read_list = [sys.stdin]
-    else:
-      self.msg("App: reading data from %s" % self.input)
-      fd = os.open(self.input,os.O_RDONLY|os.O_NONBLOCK)
-      read_list = [os.fdopen(fd)]
-
-    self._data_queue = queue.Queue()
-    while read_list:
-      fd_ready = select.select(read_list,[],[],App.WAIT_INTERVAL)[0]
-      if self._stop_event.is_set():
-        self.msg("App: request to stop reading")
-        break
-      if fd_ready:
-        line = fd_ready[0].readline().rstrip('\n')
-        #self.msg("App: input line: %s" % line)
-        if not line:             # EOF, remove file from input list
-          read_list.clear()
-        elif line.rstrip():      # optional: skipping empty lines
-          # process line
-          self._data_queue.put(line)
-
-    self.msg("App: no more input, stopping program")
-    os.kill(os.getpid(), signal.SIGINT)
 
   # --- print message   ------------------------------------------------------
 
