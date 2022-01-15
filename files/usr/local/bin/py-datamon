@@ -1,0 +1,13 @@
+#!/bin/bash
+# --------------------------------------------------------------------------
+# Wrapper-script to start py-datamon.py within virtual environment
+#
+# Author: Bernhard Bablok
+# License: GPL3
+#
+# Website: https://github.com/bablokb/py-datamon
+#
+# --------------------------------------------------------------------------
+
+source "${1%%/*}/../lib/py-datamon/runtime/bin/activate"
+"${1%%/*}/py-datamon.py "$@"
