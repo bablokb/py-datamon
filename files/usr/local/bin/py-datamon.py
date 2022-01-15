@@ -41,7 +41,6 @@ class App:
   def __init__(self):
     """ constructor """
 
-    self.is_live     = False
     self.debug       = False
 
     self._threads    = []
@@ -83,7 +82,7 @@ class App:
   def _plot(self):
     """ plot the data """
 
-    if self.is_live:
+    if self.config.is_live:
       plotter = DMPlot(self,self.config,data=self._data,
                                                  stop_event=self._stop_event)
       plotter_thread = threading.Thread(target=plotter.plot)
@@ -101,9 +100,10 @@ class App:
     if self.input != "-" and Path(self.input).is_file():
       # just import the csv-data directly
       self._data.import_file(self.input)
+      self.config.is_live = False
     else:
       # use a reader-thread if we are reading from a pipe or device
-      self.is_live = True
+      self.config.is_live = True
       reader_thread = self._data.start_reader(self.input,self._stop_event)
       self._threads.append(reader_thread)
 
@@ -200,5 +200,5 @@ if __name__ == '__main__':
 
   # run application threads
   app.run()
-  if app.is_live:
+  if app.config.is_live:
     signal.pause()

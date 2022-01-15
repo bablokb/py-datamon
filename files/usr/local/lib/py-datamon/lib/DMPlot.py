@@ -57,9 +57,13 @@ class DMPlot:
                             squeeze=False,**self._config.options)
     fig.suptitle(self._config.title,**self._config.title_opts)
 
-    # add data to plots
+    # create list of subplot-coordinates
     pos = [[r,c] for r in range(self._config.rows)
                                             for c in range(self._config.cols)]
+
+    # list of Line2D-artists (needed for live-monitoring)
+    if self._config.is_live:
+      lines = []
 
     # for every subplot...
     for [r,c],plot_cfg in zip(pos,self._config.plots):
@@ -84,11 +88,13 @@ class DMPlot:
 
       # ... plot 1..n y-values
       for value in plot_cfg.values:
-        axs[r][c].plot(self._data[plot_cfg.x.col],
-                       self._data[value.col],
-                       label = value.label,
-                       **value.options)
+        line = axs[r][c].plot(self._data[plot_cfg.x.col],
+                              self._data[value.col],
+                              label = value.label,
+                              **value.options)
         axs[r][c].set_title(plot_cfg.title,**plot_cfg.title_opts)
+        if self._config.is_live:
+          lines.append(line[0])
 
       # ... plot legend
       if plot_cfg.legend["loc"]:
