@@ -99,6 +99,13 @@ class DMData:
       return
     self.msg("DMData: new data: %s" % line)
 
+  # --- set plot-configuration   ---------------------------------------------
+
+  def set_config(self,config):
+    """ set plot-configuration """
+
+    self._config = config
+
   # --- read data from csv-file   --------------------------------------------
 
   def import_file(self,file):
