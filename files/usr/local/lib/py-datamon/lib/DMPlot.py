@@ -23,6 +23,7 @@ class DMPlot:
     """ constructor """
 
     self.msg         = app.msg
+    self._img_file   = app.output
     self._config     = config
     self._data       = data
     self._x_low      = -1
@@ -94,5 +95,9 @@ class DMPlot:
         axs[r][c].legend(**plot_cfg.legend)
 
     # show plot
-    plt.show()
-    plt.pause(1)
+    if self._img_file:
+      plt.savefig(self._img_file)
+      self.msg("DMPlot: %s created" % self._img_file,force=True)
+    else:
+      plt.show()
+      plt.pause(1)

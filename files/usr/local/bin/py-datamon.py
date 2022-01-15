@@ -57,9 +57,8 @@ class App:
 
     parser = ArgumentParser(add_help=False,description='Python Datamonitor')
 
-    parser.add_argument('-p', '--plot', action='store_true',
-                        dest='plot', default=False,
-                        help='create plots (png)')
+    parser.add_argument('-o', '--output', metavar='img_file',
+                        help='create image of plot')
     parser.add_argument('-f', '--freq', metavar='freq',
       default=0.5, help='update frequency')
 
