@@ -8,7 +8,7 @@
 # and pipe the date to stdin of this program.
 #
 # stty -echo -F /dev/ttyUSB0 115200
-# py-datamon.py -c myconf.json -m - < /dev/ttyUSB0
+# py-datamon.py -c myconf.json /dev/ttyUSB0
 #
 # Author: Bernhard Bablok
 # License: GPL3
@@ -57,9 +57,6 @@ class App:
 
     parser = ArgumentParser(add_help=False,description='Python Datamonitor')
 
-    parser.add_argument('-m', '--monitor', action='store_true',
-                        dest='monitor', default=False,
-                        help='start real-time monitor')
     parser.add_argument('-p', '--plot', action='store_true',
                         dest='plot', default=False,
                         help='create plots (png)')
