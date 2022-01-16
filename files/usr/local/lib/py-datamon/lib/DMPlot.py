@@ -26,31 +26,12 @@ class DMPlot:
     self._img_file   = app.output
     self._config     = config
     self._data       = data
-    self._x_low      = -1
     self._stop_event = stop_event
-
-  # --- scale and normalize x-axis data   ------------------------------------
-
-  def _scale_x(self):
-    """ scale and normalize x-axis data """
-
-    # normalize data (i.e. first observation to timestamp = 0)
-    if self._config.x.normalize:
-      if self._x_low < 0:
-        self._x_low = self._data[0,self._config.x.col]
-      self._data[:,self._config.x.col] -= self._x_low
-
-    # scale data (eg. from ms to s)
-    if self._config.x.scale != 1:
-      self._data[:,self._config.x.col] *= self._config.x.scale
 
   # --- plot the data   ------------------------------------------------------
 
   def plot(self):
     """ plot the data """
-
-    # normalize and scale
-    self._scale_x()
 
     # define grid of plots
     fig, axs = plt.subplots(nrows=self._config.rows, ncols=self._config.cols,

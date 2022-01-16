@@ -31,6 +31,7 @@ class DMData:
     self._data_labels  = None
     self._index_low    = 0
     self._index_high   = 0
+    self._x_low        = -1
 
   # --- get item   -----------------------------------------------------------
 
@@ -99,6 +100,21 @@ class DMData:
       return
     self.msg("DMData: new data: %s" % line)
 
+  # --- scale and normalize x-axis data   ------------------------------------
+
+  def _scale_x(self):
+    """ scale and normalize x-axis data """
+
+    # normalize data (i.e. first observation to timestamp = 0)
+    if self._config.x.normalize:
+      if self._x_low < 0:
+        self._x_low = self._data[0,self._config.x.col]
+      self._data[:,self._config.x.col] -= self._x_low
+
+    # scale data (eg. from ms to s)
+    if self._config.x.scale != 1:
+      self._data[:,self._config.x.col] *= self._config.x.scale
+
   # --- set plot-configuration   ---------------------------------------------
 
   def set_config(self,config):
@@ -136,6 +152,8 @@ class DMData:
     self._index_low  = 0
     self._index_high = self._data.shape[0]
 
+    # normalize and scale data
+    self._scale_x()
 
   # --- start reader thread for dynamic data   -------------------------------
 
