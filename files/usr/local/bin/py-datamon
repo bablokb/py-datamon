@@ -9,5 +9,5 @@
 #
 # --------------------------------------------------------------------------
 
-source "${1%%/*}/../lib/py-datamon/runtime/bin/activate"
-"${1%%/*}/py-datamon.py "$@"
+source "${0%/*}/../lib/py-datamon/runtime/bin/activate"
+"${0%/*}/py-datamon.py" "$@"
