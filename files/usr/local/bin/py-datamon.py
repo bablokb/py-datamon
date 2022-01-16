@@ -141,6 +141,7 @@ class App:
       plot = json.load(f)
       f.close()
       self.config = DMConfigPlot(self,plot)
+      self._data.set_config(self.config)
       return True
     except:
       self.msg("App: reading configuration from %s failed" % str(p),True)
