@@ -1,0 +1,57 @@
+#!/bin/bash
+# --------------------------------------------------------------------------
+# This script installs files and services specific to this project.
+#
+# Author: Bernhard Bablok
+# License: GPL3
+#
+# Website: https://github.com/bablokb/py-datamon
+#
+# --------------------------------------------------------------------------
+
+# --- defaults used during installation   ----------------------------------
+
+PACKAGES="python3-pip"
+PACKAGES_PIP="virtualenv"
+PACKAGES_VIRT="pandas matplotlib"
+
+PROJECT="py-datamon"
+
+# --- basic packages   ------------------------------------------------------
+
+if [ -n "$PACKAGES" ]; then
+  apt-get update
+  apt-get -y install $PACKAGES
+fi
+
+# install PIP3 packages
+[ -n "$PACKAGES_PIP" ] && pip3 --disable-pip-version-check install $PACKAGES_PIP
+
+# --- install specific files   ----------------------------------------------
+
+rand="$RANDOM"
+if [ -f /etc/${PROJECT}.conf ]; then
+  # save current configuration
+  mv /etc/${PROJECT}.conf /etc/${PROJECT}.conf.$rand
+fi
+
+for f in `find $(dirname "$0")/../files/ -type f -not -name "*.pyc"`; do
+  target="${f#*files}"
+  target_dir="${target%/*}"
+  [ ! -d "$target_dir" ] && mkdir -p "$target_dir"
+  cp "$f" "$target"
+  chown root:root "$target"
+  chmod 644       "$target"
+done
+
+chmod 755 "/usr/local/bin/${PROJECT}.py"
+chmod 755 "/usr/local/bin/${PROJECT}"
+
+# --- install virtual environment   -----------------------------------------
+
+cd "/usr/local/lib/${PROJECT}"
+virtualenv runtime
+source runtime/bin/activate
+pip3 install $PACKAGES_VIRT
+
+echo "installed virtenv for $PROJECT in /usr/local/lib/${PROJECT}/runtime"
