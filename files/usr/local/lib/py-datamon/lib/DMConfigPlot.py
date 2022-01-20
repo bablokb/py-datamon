@@ -24,12 +24,15 @@ class DMConfigPlot(types.SimpleNamespace):
     self.msg = app.msg
     
     # set defaults
+    self.width      = None
+    self.height     = None
     self.title      = ""
     self.title_opts = {}
     self.options    = {"constrained_layout": True}
     self.legend     = {"loc": "best"}
     self.cols       = 1
     self.x          = {}
+    self.samples    = None
     self.xaxis      = {"text": "time (ms)"}
     self.yaxis      = {"text": "value"}
     self.grid       = True
@@ -51,7 +54,7 @@ class DMConfigPlot(types.SimpleNamespace):
     self.msg("DMConfigPlot: subplot-layout is %dx%d" % (self.rows,self.cols))
 
     # convert special attributes to options
-    if hasattr(self,"width") and hasattr(self,"height"):
+    if self.width and self.height:
       self.options['figsize'] = (self.width/100,self.height/100)
       self.options['dpi']     = 100
 
