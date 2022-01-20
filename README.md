@@ -64,7 +64,7 @@ The formal definition of a configuration-file is in
 
   - how many subplots you want
   - how many values should be plotted together in each subplot
-  - which columns of the csv-data map to which value
+  - which columns of the csv map to which value
   - define titles and labels
 
 The best strategy is to take one of the
@@ -76,4 +76,3 @@ config-files don't expose the full power of Matplotlib. If you need
 to create publication-ready plots, you might be better of programming
 Matplotlib directly. But for simple data-visualization py-datamon
 should be flexible enough.
-
