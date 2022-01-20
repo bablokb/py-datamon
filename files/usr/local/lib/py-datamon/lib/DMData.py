@@ -9,7 +9,7 @@
 #
 # ----------------------------------------------------------------------------
 
-import csv
+import csv, threading
 import pandas as pd
 
 # --- data management for the application   ----------------------------------
@@ -22,15 +22,18 @@ class DMData:
   def __init__(self,app):
     """ constructor """
 
-    self.msg   = app.msg
-    self.debug = app.debug
+    self.msg     = app.msg
+    self.debug   = app.debug
+    self._config = app.config
+    self._wait   = app.WAIT_INTERVAL
 
     # set defaults
 
+    self._lock         = threading.Lock()
     self._data         = None
     self._data_labels  = None
     self._index_low    = 0
-    self._index_high   = 0
+    self._index_high   = -1
     self._x_low        = -1
 
   # --- get item   -----------------------------------------------------------
@@ -59,10 +62,10 @@ class DMData:
     """ guess delimiter by sniffing the given line """
 
     if file is None:
-      return csv.Sniffer().sniff(line).delimiter
+      return csv.Sniffer().sniff(line).delimiter,line
     else:
       with open(file,'rt') as csvfile:
-        line = csvfile.readline()
+        line = csvfile.readline().rstrip('\n')
         return self._get_delim(line=line)
 
   # --- read data   ----------------------------------------------------------
@@ -80,7 +83,7 @@ class DMData:
       read_list = [os.fdopen(fd)]
 
     while read_list:
-      fd_ready = select.select(read_list,[],[],App.WAIT_INTERVAL)[0]
+      fd_ready = select.select(read_list,[],[],self._wait)[0]
       if self._stop_event.is_set():
         self.msg("DMData: request to stop reading")
         break
@@ -107,20 +110,12 @@ class DMData:
 
     # normalize data (i.e. first observation to timestamp = 0)
     if self._config.x.normalize:
-      if self._x_low < 0:
-        self._x_low = self._data[0,self._config.x.col]
-      self._data[:,self._config.x.col] -= self._x_low
+      x_low = self._data[0,self._config.x.col]
+      self._data[:,self._config.x.col] -= x_low
 
     # scale data (eg. from ms to s)
     if self._config.x.scale != 1:
       self._data[:,self._config.x.col] *= self._config.x.scale
-
-  # --- set plot-configuration   ---------------------------------------------
-
-  def set_config(self,config):
-    """ set plot-configuration """
-
-    self._config = config
 
   # --- read data from csv-file   --------------------------------------------
 
@@ -128,16 +123,27 @@ class DMData:
     """ read data from csv file """
 
     self.msg("DMData: reading data from %s" % file)
-    delim = self._get_delim(file=file)
+    delim,line = self._get_delim(file=file)
     self.msg("DMData: delimiter is: '%s'" % delim)
+
+    # check for header line: no field is numeric
+    words = line.split(delim)
+    skiprows = 1
+    for word in words:
+      try:
+        float(word)
+        skiprows = 0
+        break
+      except:
+        pass
+
+    if skiprows == 1:
+      self.msg("DMData: dropping csv-header: %r" % (words,))
+      self._data_labels = words
 
     # using pandas to read the data, because it is more robust
     # then np.genfromtxt ...
-    self._data = pd.read_csv(file,header=None,sep=delim)
-    if any(self._data.iloc[0].apply(lambda x: isinstance(x, str))):
-      self.msg("DMData: dropping csv-header")
-      self._data_labels = self._data.iloc[0]
-      self._data = self._data[1:].reset_index(drop=True)
+    self._data = pd.read_csv(file,header=None,skiprows=skiprows,sep=delim)
     if self.debug:
       self.msg("DMData: total data-rows: %d" % self._data.shape[0])
       print("-"*75)
