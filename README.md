@@ -39,17 +39,14 @@ Test and simple use
 
 To test the program, run these commands:
 
-    #activate virtual environment
-    source /usr/local/lib/py-datamon/runtime/activate
-
     # create test-data (takes 20 seconds)
     tools/sincos-data.py 0.1 200 | tee testdata.csv
 
     # create plot with 3x2 subplots, one value each
-    /usr/local/bin/py-datamon.py -c sincos3x2x1.json testdata.csv
+    /usr/local/bin/py-datamon -c sincos3x2x1.json testdata.csv
 
     # or all values in a single subplot
-    /usr/local/bin/py-datamon.py -c sincos1x1x6.json testdata.csv
+    /usr/local/bin/py-datamon -c sincos1x1x6.json testdata.csv
 
 Read the [full documentation](doc/usage.md) for all the details.
 
