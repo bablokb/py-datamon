@@ -42,10 +42,9 @@ class App:
     """ constructor """
 
     self.debug       = False
-
+    self.config      = None
     self._threads    = []
     self._stop_event = threading.Event()
-    self._data       = DMData(self)
     parser = self._get_parser()
     parser.parse_args(namespace=self)
 
@@ -141,7 +140,6 @@ class App:
       plot = json.load(f)
       f.close()
       self.config = DMConfigPlot(self,plot)
-      self._data.set_config(self.config)
       return True
     except:
       self.msg("App: reading configuration from %s failed" % str(p),True)
@@ -179,6 +177,7 @@ class App:
   def run(self):
     """ run application """
 
+    self._data = DMData(self)
     self._read()
     self.msg("App: running ...")
     self._plot()
