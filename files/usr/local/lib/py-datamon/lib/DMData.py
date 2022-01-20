@@ -30,7 +30,8 @@ class DMData:
 
     # set defaults
 
-    self._lock         = threading.Lock()
+    self.new_data      = False
+    self.lock          = threading.Lock()
     self._data         = None
     self._data_labels  = None
     self._index_low    = 0
@@ -42,10 +43,11 @@ class DMData:
   def __getitem__(self,key):
     """ return slice of data """
 
-    if isinstance(key,int):
-      return self._data[self._index_low:self._index_high,key]
-    else:
-      return self._data[key[0],key[1]]
+    with self.lock:
+      if isinstance(key,int):
+        return self._data[self._index_low:self._index_high,key]
+      else:
+        return self._data[key[0],key[1]]
 
   # --- set item   -----------------------------------------------------------
 
@@ -158,7 +160,8 @@ class DMData:
       self._resize_buffer()
 
     # add data to dataset
-    with self._lock:
+    with self.lock:
+      self.new_data     = True
       self._index_high += 1
       self._data[self._index_high,:] = data_line
 
