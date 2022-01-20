@@ -58,7 +58,7 @@ class App:
     parser.add_argument('-o', '--output', metavar='img_file',
                         help='create image of plot')
     parser.add_argument('-f', '--freq', metavar='freq',
-      default=0.5, help='update frequency')
+      default=100, help='update frequency in milliseconds (default: 100)')
 
     parser.add_argument('-c', '--config', metavar='conf',
       help='config-file')

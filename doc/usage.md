@@ -24,7 +24,7 @@ Interactive help is available with the `-h`-option:
     optional arguments:
       -o img_file, --output img_file
                             create image of plot
-      -f freq, --freq freq  update frequency
+      -f freq, --freq freq  update frequency in milliseconds (default: 100)
       -c conf, --config conf
                             config-file
       -d, --debug           force debug-mode
