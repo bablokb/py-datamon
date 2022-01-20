@@ -76,21 +76,6 @@ class App:
 
     return parser
 
-  # --- plot the data   ------------------------------------------------------
-
-  def _plot(self):
-    """ plot the data """
-
-    if self.config.is_live:
-      plotter = DMPlot(self,self.config,data=self._data,
-                                                 stop_event=self._stop_event)
-      plotter_thread = threading.Thread(target=plotter.plot)
-      plotter_thread.start()
-      self._threads.append(plotter_thread)
-    else:
-      plotter = DMPlot(self,self.config,data=self._data)
-      plotter.plot()
-
   # --- read data   ----------------------------------------------------------
 
   def _read(self):
@@ -147,13 +132,6 @@ class App:
         traceback.print_exc()
       return False
 
-  # --- return data-object   --------------------------------------------------
-
-  def get_data(self):
-    """ return data-object """
-
-    return self._data
-
   # --- setup signal handler   ------------------------------------------------
 
   def signal_handler(self,_signo, _stack_frame):
@@ -180,7 +158,8 @@ class App:
     self._data = DMData(self)
     self._read()
     self.msg("App: running ...")
-    self._plot()
+    plotter = DMPlot(self,self.config,data=self._data)
+    plotter.plot()
 
 # --- main program   ---------------------------------------------------------
 
