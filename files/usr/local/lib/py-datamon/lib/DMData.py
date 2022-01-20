@@ -9,8 +9,9 @@
 #
 # ----------------------------------------------------------------------------
 
-import csv, threading
+import sys, csv, threading, select
 import pandas as pd
+import numpy as np
 
 # --- data management for the application   ----------------------------------
 
@@ -68,6 +69,19 @@ class DMData:
         line = csvfile.readline().rstrip('\n')
         return self._get_delim(line=line)
 
+  # --- guess if words contain data or a header   ----------------------------
+
+  def _check_header(self,words):
+    """ check for csv-header: assume that no field is numeric """
+
+    for word in words:
+      try:
+        float(word)          # if this does not trigger a ValueError
+        return 0             # we have a dataline and should not skip any rows
+      except ValueError:
+        pass                 # check next word
+    return 1                 # no numeric field, so skip one line
+
   # --- read data   ----------------------------------------------------------
 
   def _read_continuous(self):
@@ -103,6 +117,73 @@ class DMData:
       return
     self.msg("DMData: new data: %s" % line)
 
+    # check for initial state
+    if self._data is None:
+      # guess delimiter and split line
+      self._delim,_ = self._get_delim(line=line)
+      self.msg("DMData: delimiter is: '%s'" % self._delim)
+      words = line.split(self._delim)
+
+      # estimate buffer size and create numpy-buffer
+      if self._config.samples:
+        n = self._config.samples
+      elif self._config.width:
+        n = self._config.width
+      else:
+        n = 500
+      self.msg("DMData: create numpy-buffer with %d records" % n)
+      self._data = np.zeros((n,len(words)))
+
+
+      # check for header
+      if self._check_header(words) == 1:
+        self.msg("DMData: dropping csv-header: %r" % (words,))
+        self._data_labels = words
+        return
+
+    # self._data already exists
+    else:
+      words = line.split(self._delim)
+
+    # convert data
+    try:
+      data_line = [float(word) for word in words]
+      self._scale_record(data_line)
+    except ValueError:
+      self.msg("DMData: failed to convert: %s" % line)
+      return
+
+    # resize numpy-buffer if necessary
+    if self._index_high == self._data.shape[0]:
+      self._resize_buffer()
+
+    # add data to dataset
+    with self._lock:
+      self._index_high += 1
+      self._data[self._index_high,:] = data_line
+
+  # --- resize numpy-buffer   ------------------------------------------------
+
+  def _resize_buffer(self):
+    """ resize numpy buffer """
+
+    pass
+
+  # --- scale and normalize record   -----------------------------------------
+
+  def _scale_record(self,record):
+    """ scale and normalize single record """
+
+    # normalize data (i.e. first observation to timestamp = 0)
+    if self._config.x.normalize:
+      if self._x_low < 0:
+        self._x_low = record[0]
+      record[0] -= self._x_low
+
+    # scale data (eg. from ms to s)
+    if self._config.x.scale != 1:
+      record[0] *= self._config.x.scale
+
   # --- scale and normalize x-axis data   ------------------------------------
 
   def _scale_x(self):
@@ -128,14 +209,7 @@ class DMData:
 
     # check for header line: no field is numeric
     words = line.split(delim)
-    skiprows = 1
-    for word in words:
-      try:
-        float(word)
-        skiprows = 0
-        break
-      except:
-        pass
+    skiprows = self._check_header(words)
 
     if skiprows == 1:
       self.msg("DMData: dropping csv-header: %r" % (words,))
