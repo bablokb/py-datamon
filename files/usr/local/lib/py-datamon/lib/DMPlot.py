@@ -72,12 +72,13 @@ class DMPlot:
     pos = [[r,c] for r in range(self._config.rows)
                                             for c in range(self._config.cols)]
 
-    # list of Line2D-artists (needed for live-monitoring)
-    if self._config.is_live:
-      self._lines = []
+    # keep list of artists (needed for live-monitoring)
+    self._lines = []
+    self._axs   = []
 
     # for every subplot...
     for [r,c],plot_cfg in zip(pos,self._config.plots):
+      self._axs.append(axs[r][c])
       self.msg("DMPLot: plotting subplot[%d][%d]" % (r,c))
 
       # ... configure axis
@@ -104,8 +105,7 @@ class DMPlot:
                               label = value.label,
                               **value.options)
         axs[r][c].set_title(plot_cfg.title,**plot_cfg.title_opts)
-        if self._config.is_live:
-          self._lines.append(line[0])
+        self._lines.append(line[0])
 
       # ... plot legend
       if plot_cfg.legend["loc"]:
@@ -115,14 +115,13 @@ class DMPlot:
     if self._img_file:
       plt.savefig(self._img_file)
       self.msg("DMPlot: %s created" % self._img_file,force=True)
+    elif self._config.is_live:
+      ani = animation.FuncAnimation(fig,
+                                    self._update,
+                                    self._check_new,
+                                    interval=self._freq,
+                                    blit=True)
+      plt.show()
     else:
-      if self._config.is_live:
-        ani = animation.FuncAnimation(fig,
-                                      self._update,
-                                      self._check_new,
-                                      interval=self._freq,
-                                      blit=True)
-        plt.show()
-      else:
-        plt.show()
-        plt.pause(1)
+      plt.show()
+      plt.pause(1)
