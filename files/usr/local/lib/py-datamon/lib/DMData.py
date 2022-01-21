@@ -33,6 +33,7 @@ class DMData:
     self.new_data      = False
     self.lock          = threading.Lock()
     self._data         = None
+    self._min_max      = None
     self._data_labels  = None
     self._index_low    = 0
     self._index_high   = -1
@@ -134,8 +135,8 @@ class DMData:
       else:
         n = 500
       self.msg("DMData: create numpy-buffer with %d records" % n)
-      self._data = np.zeros((n,len(words)))
-
+      self._data    = np.zeros((n,len(words)))
+      self._min_max = np.zeros((3,len(words)))
 
       # check for header
       if self._check_header(words) == 1:
@@ -161,11 +162,23 @@ class DMData:
 
     # add data to dataset
     with self.lock:
-      self.new_data     = True
+      # track min and max
+      if self._index_high == 0:
+        self._min_max[0] = data_line
+        self._min_max[1] = data_line
+      else:
+        self._min_max[2] = data_line                 # current sample
+        self._min_max[0] = self._min_max.min(axis=0) # update minimum
+        self._min_max[1] = self._min_max.max(axis=0) # update maximum
+
+      # roll data if necessary
       if self._index_high == self._data.shape[0]-1:
         self._data = np.roll(self._data,-1,0)
       else:
         self._index_high += 1
+
+      # finally save new observation
+      self.new_data = True
       self._data[self._index_high,:] = data_line
 
   # --- resize numpy-buffer   ------------------------------------------------
