@@ -159,7 +159,7 @@ class DMData:
     # add data to dataset
     with self.lock:
       # track min and max
-      if self._index_high == 0:
+      if self._index_high == -1:
         self._min_max.iloc[0] = data_line
         self._min_max.iloc[1] = data_line
       else:
@@ -170,6 +170,8 @@ class DMData:
       # roll data if necessary
       if self._index_high == self._data.shape[0]-1:
         self._data = np.roll(self._data,-1,0)
+        self._min_max[0][self._config.x.col] = self._data[0][self._config.x.col]
+        self._min_max[1][self._config.x.col] = self._data[self._index_high][self._config.x.col]
       else:
         self._index_high += 1
 
@@ -261,3 +263,11 @@ class DMData:
     reader_thread = threading.Thread(target=self._read_continuous)
     reader_thread.start()
     return reader_thread
+
+  # --- query min and max of a column   --------------------------------------
+
+  def minmax(self,col):
+    """ return minimum and maximum of a column """
+
+    with self.lock:
+      return self._min_max[0:2][col].to_list()
