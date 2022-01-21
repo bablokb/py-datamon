@@ -85,6 +85,19 @@ class DMData:
         pass                 # check next word
     return 1                 # no numeric field, so skip one line
 
+  # --- guess if words contain data or a header   ----------------------------
+
+  def _convert_data(self,words):
+    """ convert data to float skipping numeric fields """
+
+    result = []
+    for word in words:
+      try:
+        result.append(float(word))
+      except ValueError:
+        result.append(word)
+    return result
+
   # --- read data   ----------------------------------------------------------
 
   def _read_continuous(self):
@@ -136,7 +149,7 @@ class DMData:
         n = 500
       self.msg("DMData: create numpy-buffer with %d records" % n)
       self._data    = np.zeros((n,len(words)))
-      self._min_max = np.zeros((3,len(words)))
+      self._min_max = pd.DataFrame(index=range(3),columns=range(len(words)))
 
       # check for header
       if self._check_header(words) == 1:
@@ -149,12 +162,8 @@ class DMData:
       words = line.split(self._delim)
 
     # convert data
-    try:
-      data_line = [float(word) for word in words]
-      self._scale_record(data_line)
-    except ValueError:
-      self.msg("DMData: failed to convert: %s" % line)
-      return
+    data_line = pd.to_numeric(words,errors='coerce')
+    self._scale_record(data_line)
 
     # resize numpy-buffer if necessary
     if self._index_high == self._data.shape[0]:
@@ -164,12 +173,12 @@ class DMData:
     with self.lock:
       # track min and max
       if self._index_high == 0:
-        self._min_max[0] = data_line
-        self._min_max[1] = data_line
+        self._min_max.iloc[0] = data_line
+        self._min_max.iloc[1] = data_line
       else:
-        self._min_max[2] = data_line                 # current sample
-        self._min_max[0] = self._min_max.min(axis=0) # update minimum
-        self._min_max[1] = self._min_max.max(axis=0) # update maximum
+        self._min_max.iloc[2] = data_line                 # current sample
+        self._min_max.iloc[0] = self._min_max.min()       # update minimum
+        self._min_max.iloc[1] = self._min_max.max()       # update maximum
 
       # roll data if necessary
       if self._index_high == self._data.shape[0]-1:
