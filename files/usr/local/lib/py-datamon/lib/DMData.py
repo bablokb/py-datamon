@@ -162,7 +162,10 @@ class DMData:
     # add data to dataset
     with self.lock:
       self.new_data     = True
-      self._index_high += 1
+      if self._index_high == self._data.shape[0]-1:
+        self._data = np.roll(self._data,-1,0)
+      else:
+        self._index_high += 1
       self._data[self._index_high,:] = data_line
 
   # --- resize numpy-buffer   ------------------------------------------------
