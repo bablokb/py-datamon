@@ -118,7 +118,7 @@ class DMData:
 
     if not line:
       return
-    self.msg("DMData: new data: %s" % line)
+    #self.msg("DMData: new data: %s" % line)
 
     # check for initial state
     if self._data is None:
