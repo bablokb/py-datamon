@@ -160,6 +160,7 @@ class App:
     self.msg("App: running ...")
     plotter = DMPlot(self,self.config,data=self._data)
     plotter.plot()
+    self.msg("App: plotting finished ...")
 
 # --- main program   ---------------------------------------------------------
 
@@ -179,5 +180,4 @@ if __name__ == '__main__':
 
   # run application threads
   app.run()
-  if app.config.is_live:
-    signal.pause()
+  app.cleanup()
