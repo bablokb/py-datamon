@@ -35,17 +35,40 @@ class DMPlot:
   def _update(self,have_new):
     """ update-function for animation """
 
-    self.msg("DMPLot: _update with have_new: %r" % have_new)
     if have_new:
-      i = 0
+      redraw = False
+      i_line = 0
+      i_ax   = 0
       for plot_cfg in self._config.plots:
+        (ymin,ymax) = self._axs[i_ax].get_ylim()
+        (xmin,xmax) = self._axs[i_ax].get_xlim()
+        (tmin,tmax) = self._data.minmax(plot_cfg.x.col)
+        if tmin > xmin:                         # scrolling!
+          self._axs[i_ax].set_xlim(left=tmin)
+          redraw = True
+        if tmax > xmax:                         # scrolling!
+          self._axs[i_ax].set_xlim(right=tmax)
+          redraw = True
+
         for value in plot_cfg.values:
-          self._lines[i].set_data(self._data[plot_cfg.x.col],     # synchronized in
-                                  self._data[value.col])          # DMData
-          i += 1
-      return self._lines
-    else:
-      return []
+          # check if a redraw is necessary
+          (vmin,vmax) = self._data.minmax(value.col)
+          if not plot_cfg.yaxis.min and vmin < ymin:
+            self._axs[i_ax].set_ylim(bottom=vmin)
+            redraw = True
+          if not plot_cfg.yaxis.max and vmax > ymax:
+            self._axs[i_ax].set_ylim(top=vmax)
+            redraw = True
+          # update values
+          self._lines[i_line].set_data(self._data[plot_cfg.x.col], # synchronized in
+                                  self._data[value.col])           # DMData
+          i_line += 1
+        i_ax += 1
+      if redraw:
+        self._axs[0].figure.canvas.draw()
+
+    # always return the line-artists, or else the animation fails
+    return self._lines
 
   # --- check for new data   -------------------------------------------------
 
