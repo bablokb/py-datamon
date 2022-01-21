@@ -85,19 +85,6 @@ class DMData:
         pass                 # check next word
     return 1                 # no numeric field, so skip one line
 
-  # --- guess if words contain data or a header   ----------------------------
-
-  def _convert_data(self,words):
-    """ convert data to float skipping numeric fields """
-
-    result = []
-    for word in words:
-      try:
-        result.append(float(word))
-      except ValueError:
-        result.append(word)
-    return result
-
   # --- read data   ----------------------------------------------------------
 
   def _read_continuous(self):
