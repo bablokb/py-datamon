@@ -150,6 +150,9 @@ class DMData:
 
     # convert data
     data_line = pd.to_numeric(words,errors='coerce')
+    if len(data_line) != self._data.shape[1]:
+      self.msg("DMData: dropping incomplete line: %r" % (words,))
+      return
     self._scale_record(data_line)
 
     # resize numpy-buffer if necessary
