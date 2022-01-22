@@ -54,18 +54,21 @@ version.
 Realtime Plots
 --------------
 
-*not yet implemented*
-
 For realtime plots, the input "file" must be a pipe or a device:
 
     stty -echo -F /dev/ttyUSB0 115200
     py-datamon -c myconf.json /dev/ttyUSB0
 
+To read from stdin, pass "-" as the filename:
+
+    data-generator | py-datamon -c myconf.json -
+
+
 Realtime plots can be a bit busy, especially if data is created with a
 high frequency. To slow down updates, pass a delay-time to the `-f`-option,
 e.g.
 
-    py-datamon -f 0.5 -c myconf.json /dev/ttyUSB0
+    py-datamon -f 500 -c myconf.json /dev/ttyUSB0
 
 would update the plot at most every 0.5 seconds.
 

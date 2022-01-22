@@ -1,8 +1,6 @@
 Realtime Python Datamonitor
 ===========================
 
-*Realtime monitoring is not implemented yet!*
-
 Introduction
 ------------
 
@@ -27,7 +25,8 @@ Use the following commands to install the data-monitor:
 
 This will copy the python-script `py-datamon.py` and some support classes
 to your system and will create a python-virtualenv with prerequisite
-packages.
+packages. It also copies the shell-script `py-datamon`, which will
+start the python-script from within the virtualenv.
 
 In addition, you have to install a suitable GUI-backend (TkInter, Qt5)
 with python-bindings for Matplotlib. You usually do this using the
@@ -47,6 +46,11 @@ To test the program, run these commands:
 
     # or all values in a single subplot
     /usr/local/bin/py-datamon -c sincos1x1x6.json testdata.csv
+
+To test the live-monitoring, use
+
+    tools/sincos-data.py 0.1 | \
+       /usr/local/bin/py-datamon -c sincos6x1.json -
 
 Read the [full documentation](doc/usage.md) for all the details.
 
