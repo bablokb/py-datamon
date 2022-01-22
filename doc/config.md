@@ -35,7 +35,7 @@ of all subplots:
 The most basic configuration would be something like this:
 
     {"title": "Simple Plot",
-         "x": {"col": 0, "label": "time"},
+         "x": {"col": 0},
      "plots": ["y": [{"col: 1, "label": "value"}]
               ]
     }
@@ -100,7 +100,6 @@ axis starts at 0. An optional "scale"-value will scale the data, e.g.
 to convert milliseconds to seconds (scale=0.001).
 
     "x": {"col":       <optional, data-column x-value, default: 0>,
-          "label":     <optional, default: "time">,
           "normalize": <optional, default false>,
           "scale":     <optional, default 1>
 

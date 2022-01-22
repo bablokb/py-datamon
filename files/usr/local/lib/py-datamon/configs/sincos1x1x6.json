@@ -2,7 +2,7 @@
   "width": 600,
   "height": 400,
   "title":  "single plot: sin(x) and cos(x)",
-  "x": {"col": 0, "label": "time"},
+  "x": {"col": 0},
   "plots": [
      {"legend": {"bbox_to_anchor": [1,1], "loc": "upper left"},
       "values": [{"col": 1, "label": "sin(x)"},

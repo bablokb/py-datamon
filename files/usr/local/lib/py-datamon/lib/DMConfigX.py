@@ -20,7 +20,6 @@ class DMConfigX(types.SimpleNamespace):
 
     # set defaults
     self.col       = 0
-    self.label     = "time"
     self.normalize = False
     self.scale     = 1
 

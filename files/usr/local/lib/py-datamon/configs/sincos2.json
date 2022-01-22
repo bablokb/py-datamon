@@ -2,7 +2,7 @@
   "width": 600,
   "height": 400,
   "title":  "two plots: sin(x) and cos(x)",
-  "x": {"col":   0, "label": "time"},
+  "x": {"col": 0},
   "plots": [
     {"values": [{"col":   1, "label": "sin(x)", "color": "blue"}]},
     {"values": [{"col":   2, 
