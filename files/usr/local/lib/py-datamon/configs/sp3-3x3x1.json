@@ -2,12 +2,12 @@
   "width": 1600,
   "height": 900,
   "title":  "Smartpower 3",
-  "x": {"col":   0},
-  "xaxis": "time (ms)",
+  "x": {"col":   0, "normalize": true, "scale": 0.001},
+  "xaxis": {"text": "time (ms)", "rescale": "+50"},
   "legend": {"loc": null},
   "plots": [
     {"values": [{"col":   1, "label": "Input Voltage"}],
-     "yaxis": "mV",
+     "yaxis": {"text": "mV", "min": 15000, "max": 15200},
      "title": "Input Voltage"
     },
     {"values": [{"col":   2, "label": "Input Current"}],
