@@ -22,6 +22,7 @@ class DMConfigAxis(types.SimpleNamespace):
     self.text      = ""
     self.min       = None
     self.max       = None
+    self.rescale   = {"max": "*2.0", "min": "*2.0"}
     self.text_opts = {}
     self.options   = {}
 
@@ -35,6 +36,10 @@ class DMConfigAxis(types.SimpleNamespace):
       self.text_opts = self.text
       self.text      = self.text_opts['text']
       del self.text_opts['text']
+
+    if isinstance(self.rescale,str):
+      self.rescale = {"max": self.rescale, "min": self.rescale}
+    self.rescale = types.SimpleNamespace(**self.rescale)
 
     # convert special attributes to options
     if hasattr(self,"color") and not 'color' in self.text_opts:
