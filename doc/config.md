@@ -69,11 +69,36 @@ Axis-Definition
 
 The simplified form is:
 
-    "yaxis": "myaxis"
+    "xaxis": "myxaxis"
+    "yaxis": "myyaxis"
 
-You can also pass minimum and maximum:
+You can also pass minimum and maximum and rescale, e.g.:
 
-    "yaxis": {"text": "myaxis", "min": 0, "max": 100}
+    "yaxis": {"text": "myaxis", "min": 0, "max": 100,
+              "rescale": <rescale-definition, optional>}
+
+
+Rescale-Definition
+------------------
+
+The simple-form sets both values at once:
+
+    "rescale": "value"
+
+long form:
+
+    "rescale": {"max": "max-value", "min": "min-value"}
+
+Value can be one off: "off", "auto", "+F", "*F".
+
+The "+"-version will rescale the respective end of the axis using
+a fixed offset, the "*"-version will scale with a factor.
+The default is "*2.0". Scaling at the lower end of the x-axis works
+different.
+
+Note that scaling is only relevant for live-plotting, see
+["Understanding Samples, Scrolling and Rescaling of Axis"](scaling.md)
+for details.
 
 
 Grid-Defintion
