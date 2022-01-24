@@ -30,6 +30,52 @@ class DMPlot:
     self._data       = data
     self._stop_event = stop_event
 
+  # --- calculate new xmin for plot   ----------------------------------------
+
+  def _new_xmin(self,cfg,xmin,current):
+    """ get new minimum for x-axis """
+
+    if cfg.min == "off":
+      # keep configured minimum
+      return xmin
+    elif cfg.min == "auto":
+      return current
+    elif cfg.min[0] == "*":
+      # to slow down flickering, we move the minimum only if
+      # current > fac*xmin
+      if current > float(cfg.min[1:])*xmin:
+        return current
+      else:
+        return xmin
+    elif cfg.min[0] == "+":
+      if current > xmin+float(cfg.min[1:]):
+        return current
+      else:
+        return xmin
+    else:
+      # unsupported
+      return current
+
+  # --- calculate new xmax for plot   ----------------------------------------
+
+  def _new_xmax(self,cfg,xmax,current):
+    """ get new maximum for x-axis """
+
+    if cfg.max == "off":
+      # keep configured maximum
+      return xmax
+    elif cfg.max == "auto":
+      return current
+    elif cfg.max[0] == "*":
+      # we expect a factor > 1: increase by factor
+      return max(10,current,xmax*float(cfg.max[1:]))
+    elif cfg.max[0] == "+":
+      # linear increase
+      return xmax + float(cfg.max[1:])
+    else:
+      # unsupported
+      return current
+
   # --- update the plot-data   -----------------------------------------------
 
   def _update(self,have_new):
@@ -43,12 +89,18 @@ class DMPlot:
         (ymin,ymax) = self._axs[i_ax].get_ylim()
         (xmin,xmax) = self._axs[i_ax].get_xlim()
         (tmin,tmax) = self._data.minmax(plot_cfg.x.col)
-        if tmin > xmin:                         # scrolling!
-          self._axs[i_ax].set_xlim(left=tmin)
-          redraw = True
-        if tmax > xmax:                         # scrolling!
-          self._axs[i_ax].set_xlim(right=tmax)
-          redraw = True
+
+        # handle x-axis scrolling/rescaling
+        if tmin > xmin:
+          new_min = self._new_xmin(plot_cfg.xaxis.rescale,xmin,tmin)
+          if new_min > xmin:
+            self._axs[i_ax].set_xlim(left=new_min)
+            redraw = True
+        if tmax > xmax:
+          new_max = self._new_xmax(plot_cfg.xaxis.rescale,xmax,tmax)
+          if new_max > xmax:
+            self._axs[i_ax].set_xlim(right=new_max)
+            redraw = True
 
         for value in plot_cfg.values:
           # check if a redraw is necessary
