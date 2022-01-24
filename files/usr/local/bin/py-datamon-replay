@@ -1,0 +1,33 @@
+#!/bin/bash
+# --------------------------------------------------------------------------
+# Script to replay a csv-file in live-plotting mode. This script passes
+# all arguments to py-datamon except the last, which is a delay value.
+#
+# Author: Bernhard Bablok
+# License: GPL3
+#
+# Website: https://github.com/bablokb/py-datamon
+#
+# --------------------------------------------------------------------------
+
+n="$#"
+last="${@: -1}"
+
+if [ "${last##*.}" = "csv" ]; then
+  # last argument is a csv-file, use default delay
+  delay="0.1"
+  infile="$last"
+  let n-=1
+else
+  # last argument is the delay
+  delay="$last"
+  infile="${@: -2:1}"
+  let n-=2
+fi
+
+# read csv-file line by line with given delay
+while true; do
+  read line
+  sleep "$delay"
+  echo "$line"
+done < "$infile" | "$(dirname $0)/py-datamon" "${@:1:$n}" -
