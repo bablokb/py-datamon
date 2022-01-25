@@ -9,6 +9,7 @@
 #
 # ----------------------------------------------------------------------------
 
+import time
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
@@ -172,6 +173,11 @@ class DMPlot:
 
       # ... and plot grid
       axs[r][c].grid(visible=plot_cfg.grid,**plot_cfg.grid_opts)
+
+      if self._config.is_live:
+        # wait until data is available
+        while not self._data.new_data:
+          time.sleep(self._freq/100)
 
       # ... plot 1..n y-values
       for value in plot_cfg.values:
