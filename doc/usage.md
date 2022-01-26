@@ -72,6 +72,19 @@ e.g.
 
 would update the plot at most every 0.5 seconds.
 
+If you already have a csv-file, you can "replay" it, i.e. simulate
+live-plotting with:
+
+    py-datamon-replay -c myconfig.json mydata.csv [delay]
+
+The default delay is 0.1 seconds.
+
+Since Matplotlib autoscales both axes, you will experience frequent
+updates of the scales in the beginning. To circumvent this problem,
+you can set (initial) limits for the axes. See
+["Understanding Samples, Scrolling and Rescaling of Axis"](scaling.md)
+for details.
+
 
 Configuration Files
 -------------------
