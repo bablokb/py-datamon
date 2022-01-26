@@ -23,6 +23,9 @@ Use the following commands to install the data-monitor:
     cd py-datamon
     sudo tools/install
 
+If your system is not Debian-based, you should edit the install
+commands within `tools/install` to your needs.
+
 This will copy the python-script `py-datamon.py` and some support classes
 to your system and will create a python-virtualenv with prerequisite
 packages. It also copies the shell-script `py-datamon`, which will
@@ -31,6 +34,10 @@ start the python-script from within the virtualenv.
 In addition, you have to install a suitable GUI-backend (TkInter, Qt5)
 with python-bindings for Matplotlib. You usually do this using the
 package-manager of your distribution.
+
+Note that the installation might fail, e.g. on PiOS-Buster the system
+could not pip-install pandas because the installation of numpy failed.
+In this case, use the version of pandas provided by your package-management.
 
 
 Test and simple use
