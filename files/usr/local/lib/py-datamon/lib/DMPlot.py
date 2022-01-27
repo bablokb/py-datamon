@@ -168,6 +168,24 @@ class DMPlot:
         self._data.new_data = False
       yield have_new
 
+  # --- format x as time   ---------------------------------------------------
+
+  def _fmt_time(self,x):
+    """ format x-value as [hh:]mm:ss.mmm """
+
+    x,frac = divmod(x,1)
+    m, s = divmod(int(x),60)
+    h, m = divmod(m,60)
+
+    frac = int(1000*frac)
+    frac = "" if frac == 0 else ".{0:03d}".format(frac)
+    frac = frac.rstrip("0")
+
+    if h > 0:
+      return "{0:02d}:{1:02d}:{2:02d}{3:s}".format(h,m,s,frac)
+    else:
+      return "{0:02d}:{1:02d}{2:s}".format(m,s,frac)
+
   # --- plot the data   ------------------------------------------------------
 
   def plot(self):
@@ -192,6 +210,9 @@ class DMPlot:
       self.msg("DMPLot: plotting subplot[%d][%d]" % (r,c))
 
       # ... configure axis
+      if plot_cfg.xaxis.type == "time":
+        axs[r][c].xaxis.set_major_formatter(lambda x, pos: self._fmt_time(x))
+        axs[r][c].tick_params(axis='x',labelrotation=45)
       if plot_cfg.xaxis.min:
         axs[r][c].set_xlim(left=plot_cfg.xaxis.min)
       if plot_cfg.xaxis.max:
