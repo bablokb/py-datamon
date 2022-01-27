@@ -3,6 +3,7 @@
   "height": 400,
   "title":  "single plot: sin(x) and cos(x)",
   "x": {"col": 0},
+  "yaxis": {"text": "value", "rescale": "+0.2"},
   "plots": [
      {"legend": {"bbox_to_anchor": [1,1], "loc": "upper left"},
       "values": [{"col": 1, "label": "sin(x)"},
