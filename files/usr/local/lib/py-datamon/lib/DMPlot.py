@@ -77,6 +77,38 @@ class DMPlot:
       # unsupported
       return current
 
+  # --- calculate new y-limits for plot   ------------------------------------
+
+  def _new_ylim(self,rescale,ymin,ymax,current):
+    """ get new limits for y-axis """
+
+    if rescale == "auto":
+      return current
+
+    if current < ymin:
+      lower = True
+    else:
+      lower = False
+
+    if rescale == "off":
+      # keep configured limit
+      return ymin if lower else ymax
+    elif rescale[0] == "*":
+      # we expect a factor >1: increase interval by factor
+      interval = ymax-ymin
+      if lower:
+        return min(current,ymax-float(rescale[1:])*interval)
+      else:
+        return max(current,ymin+float(rescale[1:])*interval)
+    elif rescale[0] == "+":
+      if lower:
+        return min(current,ymin-float(rescale[1:]))
+      else:
+        return max(current,ymax+float(rescale[1:]))
+    else:
+      # unsupported
+      return current
+
   # --- update the plot-data   -----------------------------------------------
 
   def _update(self,have_new):
@@ -107,10 +139,12 @@ class DMPlot:
           # check if a redraw is necessary
           (vmin,vmax) = self._data.minmax(value.col)
           if not plot_cfg.yaxis.min and vmin < ymin:
-            self._axs[i_ax].set_ylim(bottom=vmin)
+            new_min = self._new_ylim(plot_cfg.yaxis.rescale.min,ymin,ymax,vmin)
+            self._axs[i_ax].set_ylim(bottom=new_min)
             redraw = True
           if not plot_cfg.yaxis.max and vmax > ymax:
-            self._axs[i_ax].set_ylim(top=vmax)
+            new_max = self._new_ylim(plot_cfg.yaxis.rescale.max,ymin,ymax,vmax)
+            self._axs[i_ax].set_ylim(top=new_max)
             redraw = True
           # update values
           self._lines[i_line].set_data(self._data[plot_cfg.x.col], # synchronized in
