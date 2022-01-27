@@ -3,7 +3,7 @@
   "height": 900,
   "title":  "Smartpower 3 - Ch0 vs. Ch1",
   "x": {"col":   0, "normalize": true, "scale": 0.001},
-  "xaxis": {"text": "time (ms)", "rescale": "+50"},
+  "xaxis": {"text": "time (sec)", "rescale": "+50"},
   "plots": [
     {"values": [{"col":   6, "label": "Ch0 Current"},
                 {"col":  11, "label": "Ch1 Current"}],

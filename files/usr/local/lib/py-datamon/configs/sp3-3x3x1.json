@@ -3,11 +3,11 @@
   "height": 900,
   "title":  "Smartpower 3",
   "x": {"col":   0, "normalize": true, "scale": 0.001},
-  "xaxis": {"text": "time (ms)", "rescale": "+50"},
+  "xaxis": {"text": "time (sec)", "rescale": "+50"},
   "legend": {"loc": null},
   "plots": [
     {"values": [{"col":   1, "label": "Input Voltage"}],
-     "yaxis": {"text": "mV", "min": 15000, "max": 15200},
+     "yaxis": {"text": "mV", "min": 15050, "max": 15100},
      "title": "Input Voltage"
     },
     {"values": [{"col":   2, "label": "Input Current"}],
@@ -19,7 +19,7 @@
      "title": "Input Power"
     },
     {"values": [{"col":   5, "label": "Ch0 Voltage"}],
-     "yaxis": "mV",
+     "yaxis": {"text": "mV", "min": 5180, "max": 5230},
      "title": "Ch0 Voltage"
     },
     {"values": [{"col":   6, "label": "Ch0 Current"}],
@@ -31,7 +31,7 @@
      "title": "Ch0 Power"
     },
     {"values": [{"col":  10, "label": "Ch1 Voltage"}],
-     "yaxis": "mV",
+     "yaxis": {"text": "mV", "min": 5180, "max": 5230},
      "title": "Ch1 Voltage"
     },
     {"values": [{"col":  11, "label": "Ch1 Current"}],
