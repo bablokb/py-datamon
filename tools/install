@@ -12,7 +12,7 @@
 # --- defaults used during installation   ----------------------------------
 
 PACKAGES="python3-pip"
-PACKAGES_PIP="virtualenv"
+PACKAGES_PIP=""
 PACKAGES_VIRT="pandas matplotlib"
 
 PROJECT="py-datamon"
@@ -50,7 +50,7 @@ chmod 755 "/usr/local/bin/${PROJECT}"
 # --- install virtual environment   -----------------------------------------
 
 cd "/usr/local/lib/${PROJECT}"
-virtualenv runtime
+python3 -m venv runtime
 source runtime/bin/activate
 pip3 install $PACKAGES_VIRT
 
