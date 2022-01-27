@@ -3,6 +3,7 @@
   "height": 400,
   "title":  "single plot: sin(x) and cos(x)",
   "x": {"col": 0},
+  "xaxis": {"text": "time (s)", "type": "time"},
   "plots": [
      {"values": [{"col": 1, "label": "sin(x)", "color": "blue"},
                  {"col": 2, "label": "cos(x)", "color": "red" }

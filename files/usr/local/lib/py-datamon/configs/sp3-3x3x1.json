@@ -3,7 +3,7 @@
   "height": 900,
   "title":  "Smartpower 3",
   "x": {"col":   0, "normalize": true, "scale": 0.001},
-  "xaxis": {"text": "time (sec)", "rescale": "+50"},
+  "xaxis": {"text": "time (sec)", "type": "time", "rescale": "+50"},
   "legend": {"loc": null},
   "plots": [
     {"values": [{"col":   1, "label": "Input Voltage"}],
