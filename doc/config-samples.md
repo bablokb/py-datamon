@@ -23,7 +23,7 @@ sincos1.json
 
 A single plot with two values (x-axis formatted as time).
 
-![](sincos1.png)
+![](../images/sincos1.png)
 
 
 sincos2.json
@@ -32,7 +32,7 @@ sincos2.json
 A plot with two subplots, each plot with a single value. This
 configuration also changes the color of the lines.
 
-![](sincos2.png)
+![](../images/sincos2.png)
 
 
 sincos6x1.json
@@ -40,7 +40,7 @@ sincos6x1.json
 
 A plot with the default layout: one column and as many rows as necessary.
 
-![](sincos6x1.png)
+![](../images/sincos6x1.png)
 
 
 sincos1x1x6.json
@@ -49,7 +49,7 @@ sincos1x1x6.json
 All data-values in a single plot. The legend is moved to the left of
 the plot.
 
-![](sincos1x1x6.png)
+![](../images/sincos1x1x6.png)
 
 
 sincos3x2x1.json
@@ -67,7 +67,7 @@ Configuration tweaks:
   - min and max changed for various subplots
   - lines with markers and different linestyle
 
-![](sincos3x2x1.png)
+![](../images/sincos3x2x1.png)
 
 
 sp3-3x3x1.json
@@ -79,7 +79,7 @@ This configuration will print 9 subplots in a 3x3 grid. The top row with
 the input-sensor data, the middle row with channel-0 data and the bottom
 row with channel-1 data.
 
-![](sp3-3x3x1.png)
+![](../images/sp3-3x3x1.png)
 
 
 sp3-2x1x2.json
@@ -89,7 +89,7 @@ Another configuration for the Smart-Power-3. This configuration will plot
 the current and power data in a 2x1 grid. Each subplot plots the values
 of both channels.
 
-![](sp3-2x1x2.png)
+![](../images/sp3-2x1x2.png)
 
 
 bme280-3x1x1.json
