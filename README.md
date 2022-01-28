@@ -31,13 +31,10 @@ to your system and will create a python-virtualenv with prerequisite
 packages. It also copies the shell-script `py-datamon`, which will
 start the python-script from within the virtualenv.
 
-In addition, you have to install a suitable GUI-backend (TkInter, Qt5)
+In addition, you might have to install a suitable GUI-backend (TkInter, Qt5)
 with python-bindings for Matplotlib. You usually do this using the
-package-manager of your distribution.
-
-Note that the installation might fail, e.g. on PiOS-Buster the system
-could not pip-install pandas because the installation of numpy failed.
-In this case, use the version of pandas provided by your package-management.
+package-manager of your distribution (on PiOS this was already
+preinstalled).
 
 
 Test and simple use
