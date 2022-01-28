@@ -3,12 +3,10 @@
   "height": 400,
   "title":  "two plots: sin(x) and cos(x)",
   "x": {"col": 0},
+  "xaxis": "time (s)",
   "plots": [
     {"values": [{"col":   1, "label": "sin(x)", "color": "blue"}]},
-    {"values": [{"col":   2, 
-                 "label": { "text": "cos(x)", "color": "red"},
-                 "color": "red" }
-               ]
+    {"values": [{"col":   2, "label": "cos(x)", "color": "red"}]
     }
   ]
 }

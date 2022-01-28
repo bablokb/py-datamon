@@ -3,7 +3,7 @@
   "height": 800,
   "title":  "Various plots for sin(x) and cos(x)",
   "x": {"col":   0},
-  "xaxis": {"text": "time (ms)", "max": 30},
+  "xaxis": {"text": "time (sec)", "max": 30},
   "yaxis": {"text": "y"},
   "legend": {"loc": null},
   "grid": false,
@@ -11,7 +11,7 @@
     {"values": [{"col":   1, "label": "sin(x)",
                  "options": {"color": "red"}
                 }],
-     "xaxis": {"text": "Time (ms)"},
+     "xaxis": {"text": "Time (sec)"},
      "yaxis": {"text": "sin(x)", "min": -2, "max": 2},
      "legend": {"loc": "best", "labelcolor": "red"},
      "title": "sin(x)"
@@ -22,7 +22,7 @@
     },
     {"values": [{"col":   2, "label": "cos(x)",
                  "options": {"marker": "2", "linestyle": ":"}}],
-     "xaxis":  {"text": "Time (ms)", "max": 15},
+     "xaxis":  {"text": "Time (sec)", "max": 15},
      "title":  "cos(x)"
     },
     {"values": [{"col":   5, "label": "cos(x)+N(0,0.15)"}],
@@ -30,7 +30,7 @@
      "grid": {"visible": true, "axis": "y"}
     },
     {"values": [{"col":   3, "label": "sin(x)+cos(x)"}],
-     "xaxis": {"text": "Time (ms)", "min": 10, "max": 25},
+     "xaxis": {"text": "Time (sec)", "min": 10, "max": 25},
      "title": "sin(x)+cos(x)"
     },
     {"values": [{"col":   6,

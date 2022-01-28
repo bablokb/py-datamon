@@ -3,6 +3,7 @@
   "height": 800,
   "title":  "six plots: sin(x) and cos(x)",
   "x": {"col": 0},
+  "xaxis": "time (s)",
   "plots": [
     {"values": [{"col":   1, "label": "sin(x)"}]},
     {"values": [{"col":   2, "label": "cos(x)"}]},
