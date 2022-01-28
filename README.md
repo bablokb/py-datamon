@@ -76,8 +76,8 @@ The formal definition of a configuration-file is in
   - define titles and labels
 
 The best strategy is to take one of the
-[sample configuration files](files/usr/local/lib/py-datamon/configs/Readme.md),
-copy it and adapt it to your needs.
+[sample configuration files](config-samples.md), copy it and adapt it
+to your needs.
 
 Note that Matplotlib allows you to define every aspect of a plot. The
 config-files don't expose the full power of Matplotlib. If you need

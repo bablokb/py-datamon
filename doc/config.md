@@ -8,8 +8,10 @@ The program expects data in CSV-format and will display the data
 in 1..n subplots, each with a shared x-value and multiple y-values.
 
 The configuration will map columns to subplots and x/y-values and describe
-the rendering of the plots (axes, legends and so on). Please browse through
-the samples in [`.../lib/py-datamon/configs`](../files/usr/local/lib/py-datamon/configs/Readme.md).
+the rendering of the plots (axes, legends and so on).
+
+Please browse through the samples in `.../lib/py-datamon/configs`. Short
+explainations are available in [config-samples.md](config-samples.md).
 
 
 The configuration-file must contain a json-structure with the description
