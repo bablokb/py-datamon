@@ -77,7 +77,8 @@ A configuration for [Hardkernel's "Smart-Power-3"-system](https://wiki.odroid.co
 
 This configuration will print 9 subplots in a 3x3 grid. The top row with
 the input-sensor data, the middle row with channel-0 data and the bottom
-row with channel-1 data.
+row with channel-1 data. (Note that for the image the title and labels were
+modified to reflect the specific application-example.)
 
 ![](../images/sp3-3x3x1.png)
 
@@ -87,7 +88,8 @@ sp3-2x1x2.json
 
 Another configuration for the Smart-Power-3. This configuration will plot
 the current and power data in a 2x1 grid. Each subplot plots the values
-of both channels.
+of both channels. (Note that for the image the title and labels were
+modified to reflect the specific application-example.)
 
 ![](../images/sp3-2x1x2.png)
 
