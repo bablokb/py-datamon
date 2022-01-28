@@ -44,8 +44,7 @@ for f in `find $(dirname "$0")/../files/ -type f -not -name "*.pyc"`; do
   chmod 644       "$target"
 done
 
-chmod 755 "/usr/local/bin/${PROJECT}.py"
-chmod 755 "/usr/local/bin/${PROJECT}"
+chmod 755 "/usr/local/bin/${PROJECT}"*
 
 # --- install virtual environment   -----------------------------------------
 
