@@ -76,7 +76,7 @@ The formal definition of a configuration-file is in
   - define titles and labels
 
 The best strategy is to take one of the
-[sample configuration files](config-samples.md), copy it and adapt it
+[sample configuration files](doc/config-samples.md), copy it and adapt it
 to your needs.
 
 Note that Matplotlib allows you to define every aspect of a plot. The
