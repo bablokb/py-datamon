@@ -59,7 +59,7 @@ class DMPlot:
 
   # --- calculate new xmax for plot   ----------------------------------------
 
-  def _new_xmax(self,cfg,xmax,current):
+  def _new_xmax(self,cfg,xmin,xmax,current):
     """ get new maximum for x-axis """
 
     if cfg.max == "off":
@@ -69,10 +69,10 @@ class DMPlot:
       return current
     elif cfg.max[0] == "*":
       # we expect a factor > 1: increase by factor
-      return max(10,current,xmax*float(cfg.max[1:]))
+      return max(10,current,xmin+(xmax-xmin)*float(cfg.max[1:]))
     elif cfg.max[0] == "+":
       # linear increase
-      return xmax + float(cfg.max[1:])
+      return max(current,xmax+float(cfg.max[1:]))
     else:
       # unsupported
       return current
@@ -128,9 +128,10 @@ class DMPlot:
           new_min = self._new_xmin(plot_cfg.xaxis.rescale,xmin,tmin)
           if new_min > xmin:
             self._axs[i_ax].set_xlim(left=new_min)
+            xmin = new_min
             redraw = True
         if tmax > xmax:
-          new_max = self._new_xmax(plot_cfg.xaxis.rescale,xmax,tmax)
+          new_max = self._new_xmax(plot_cfg.xaxis.rescale,xmin,xmax,tmax)
           if new_max > xmax:
             self._axs[i_ax].set_xlim(right=new_max)
             redraw = True
