@@ -17,15 +17,16 @@ explainations are available in [config-samples.md](config-samples.md).
 The configuration-file must contain a json-structure with the description
 of all subplots:
 
-    {"width":   <number, in pixel, optional, width needs height>,
-     "height":  <number, in pixel, optional, height needs width>,
-     "title":   <"text", optional>,
-     "rows":    <number of subplot-rows, optional, default: len(plots)>,
-     "cols":    <number of subplot-cols, optional, default: 1>,
-     "options": <dict, kw_args for matplotlib.pyplot.subplots()>, 
-     "x":       <optional, x-value-definition>,
-     "xaxis":   <axis-definition>,
-     "yaxis":   <axis-definition, optional>,
+    {"width":   <optional, number, in pixel, width needs height>,
+     "height":  <optional, number, in pixel, height needs width>,
+     "title":   <optional, "text">,
+     "rows":    <optional, number of subplot-rows, default: len(plots)>,
+     "cols":    <optional, number of subplot-cols, default: 1>,
+     "options": <optional, kw_args for matplotlib.pyplot.subplots()>,
+     "x":       <x-value-definition>,
+     "samples": <optional, samples-definition>,
+     "xaxis":   <optional, axis-definition>,
+     "yaxis":   <optional, axis-definition>,
      "grid":    <optional, see matplotlib.pyplot.grid()>,
      "legend"   <optional, kw_args for matplotlib.pyplot.legend()>,
      "plots":   [plot_1,
@@ -106,6 +107,25 @@ different.
 Note that scaling is only relevant for live-plotting, see
 ["Understanding Samples, Scrolling and Rescaling of Axis"](scaling.md)
 for details.
+
+
+Sample-Definition
+-----------------
+
+Number of observations to keep in the internal data-array.
+
+Long form:
+
+    "samples": {"start": value, "inc": value, "max": value}
+
+Short form:
+
+    "samples": value
+
+This sets start and max to the same value.
+
+If not set, the default is the width of the plot in pixels or 500,
+if the width is also not set.
 
 
 Grid-Defintion
