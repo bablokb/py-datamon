@@ -1,0 +1,15 @@
+{
+  "width": 600,
+  "height": 400,
+  "title":  "single plot: sin(x) and cos(x)",
+  "x": {"col": 0},
+  "samples": 200,
+  "xaxis": {"text": "time (s)", "type": "time", 
+            "min": 0, "max": 30, "rescale": "auto"},
+  "plots": [
+     {"values": [{"col": 1, "label": "sin(x)"},
+                 {"col": 2, "label": "cos(x)"}
+                ]
+     }
+  ]
+}
