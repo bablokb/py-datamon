@@ -9,7 +9,7 @@
 #
 # ----------------------------------------------------------------------------
 
-import time
+import time, traceback
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
@@ -25,6 +25,7 @@ class DMPlot:
     """ constructor """
 
     self.msg         = app.msg
+    self.debug       = app.debug
     self._img_file   = app.output
     self._freq       = app.freq
     self._config     = config
@@ -115,45 +116,49 @@ class DMPlot:
     """ update-function for animation """
 
     if have_new:
-      redraw = False
-      i_line = 0
-      i_ax   = 0
-      for plot_cfg in self._config.plots:
-        (ymin,ymax) = self._axs[i_ax].get_ylim()
-        (xmin,xmax) = self._axs[i_ax].get_xlim()
-        (tmin,tmax) = self._data.minmax(plot_cfg.x.col)
+      try:
+        redraw = False
+        i_line = 0
+        i_ax   = 0
+        for plot_cfg in self._config.plots:
+          (ymin,ymax) = self._axs[i_ax].get_ylim()
+          (xmin,xmax) = self._axs[i_ax].get_xlim()
+          (tmin,tmax) = self._data.minmax(plot_cfg.x.col)
 
-        # handle x-axis scrolling/rescaling
-        if tmin > xmin:
-          new_min = self._new_xmin(plot_cfg.xaxis.rescale,xmin,tmin)
-          if new_min > xmin:
-            self._axs[i_ax].set_xlim(left=new_min)
-            xmin = new_min
-            redraw = True
-        if tmax > xmax:
-          new_max = self._new_xmax(plot_cfg.xaxis.rescale,xmin,xmax,tmax)
-          if new_max > xmax:
-            self._axs[i_ax].set_xlim(right=new_max)
-            redraw = True
+          # handle x-axis scrolling/rescaling
+          if tmin > xmin:
+            new_min = self._new_xmin(plot_cfg.xaxis.rescale,xmin,tmin)
+            if new_min > xmin:
+              self._axs[i_ax].set_xlim(left=new_min)
+              xmin = new_min
+              redraw = True
+          if tmax > xmax:
+            new_max = self._new_xmax(plot_cfg.xaxis.rescale,xmin,xmax,tmax)
+            if new_max > xmax:
+              self._axs[i_ax].set_xlim(right=new_max)
+              redraw = True
 
-        for value in plot_cfg.values:
-          # check if a redraw is necessary
-          (vmin,vmax) = self._data.minmax(value.col)
-          if not plot_cfg.yaxis.min and vmin < ymin:
-            new_min = self._new_ylim(plot_cfg.yaxis.rescale.min,ymin,ymax,vmin)
-            self._axs[i_ax].set_ylim(bottom=new_min)
-            redraw = True
-          if not plot_cfg.yaxis.max and vmax > ymax:
-            new_max = self._new_ylim(plot_cfg.yaxis.rescale.max,ymin,ymax,vmax)
-            self._axs[i_ax].set_ylim(top=new_max)
-            redraw = True
-          # update values
-          self._lines[i_line].set_data(self._data[plot_cfg.x.col], # synchronized in
-                                  self._data[value.col])           # DMData
-          i_line += 1
-        i_ax += 1
-      if redraw:
-        self._axs[0].figure.canvas.draw()
+          for value in plot_cfg.values:
+            # check if a redraw is necessary
+            (vmin,vmax) = self._data.minmax(value.col)
+            if not plot_cfg.yaxis.min and vmin < ymin:
+              new_min = self._new_ylim(plot_cfg.yaxis.rescale.min,ymin,ymax,vmin)
+              self._axs[i_ax].set_ylim(bottom=new_min)
+              redraw = True
+            if not plot_cfg.yaxis.max and vmax > ymax:
+              new_max = self._new_ylim(plot_cfg.yaxis.rescale.max,ymin,ymax,vmax)
+              self._axs[i_ax].set_ylim(top=new_max)
+              redraw = True
+            # update values
+            self._lines[i_line].set_data(self._data[plot_cfg.x.col], # synchronized in
+                                         self._data[value.col])           # DMData
+            i_line += 1
+          i_ax += 1
+        if redraw:
+          self._axs[0].figure.canvas.draw()
+      except:
+        if self.debug:
+          traceback.print_exc()
 
     # always return the line-artists, or else the animation fails
     return self._lines
