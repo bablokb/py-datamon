@@ -9,7 +9,7 @@
 #
 # ----------------------------------------------------------------------------
 
-import sys, csv, threading, select
+import os, sys, csv, threading, select
 import pandas as pd
 import numpy as np
 
@@ -244,10 +244,14 @@ class DMData:
       print(self._data.head(10))
       print("-"*75)
 
+    # convert x to date/datetime
+    if self._config.x.type in ["date","datetime"]:
+      self._data[self._config.x.col] = pd.to_datetime(
+        self._data[self._config.x.col])
+
     # ... but convert to numpy-array, because a dataframe is not
     # thread-safe
     self._data = self._data.to_numpy()
-
     # set low/high indices (for csv-files, we use the complete data)
     self._index_low  = 0
     self._index_high = self._data.shape[0]
