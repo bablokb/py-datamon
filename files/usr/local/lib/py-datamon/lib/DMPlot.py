@@ -12,6 +12,7 @@
 import time, traceback
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import matplotlib.dates as mdates
 
 # --- class DMPLot   ---------------------------------------------------------
 
@@ -216,9 +217,14 @@ class DMPlot:
       self.msg("DMPLot: plotting subplot[%d][%d]" % (r,c))
 
       # ... configure axis
-      if plot_cfg.xaxis.type == "time":
+      if plot_cfg.x.type == "time":
         axs[r][c].xaxis.set_major_formatter(lambda x, pos: self._fmt_time(x))
         axs[r][c].tick_params(axis='x',labelrotation=45)
+      elif plot_cfg.x.type == "date":
+        locator = mdates.AutoDateLocator()
+        formatter = mdates.ConciseDateFormatter(locator)
+        axs[r][c].xaxis.set_major_locator(locator)
+        axs[r][c].xaxis.set_major_formatter(formatter)
       if plot_cfg.xaxis.min:
         axs[r][c].set_xlim(left=plot_cfg.xaxis.min)
       if plot_cfg.xaxis.max:
