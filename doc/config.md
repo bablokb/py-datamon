@@ -78,13 +78,7 @@ The simplified form is:
 You can also pass minimum and maximum and rescale, e.g.:
 
     "yaxis": {"text": "myaxis", "min": 0, "max": 100,
-              "rescale": <rescale-definition, optional>,
-              "type": <plain|time|datetime>, optional, default: plain}
-
-The "type"-attribute is only valid for the x-axis. A value of "time"
-will format the x-axis as "[hh:]mm:ss", datetime will use default
-datetime-formatting of Matplotlib.
-
+              "rescale": <rescale-definition, optional>}
 
 Rescale-Definition
 ------------------
@@ -153,7 +147,13 @@ to convert milliseconds to seconds (scale=0.001).
 
     "x": {"col":       <optional, data-column x-value, default: 0>,
           "normalize": <optional, default false>,
-          "scale":     <optional, default 1>
+          "scale":     <optional, default 1>,
+          "type": <plain|time|date|datetime>, optional, default: plain}
+
+The "type"-attribute will format x-values correctly. A value of "time"
+will format the x-axis as "[hh:]mm:ss", date/datetime will use default
+datetime-formatting of Matplotlib.
+
 
 
 Value-Definition
