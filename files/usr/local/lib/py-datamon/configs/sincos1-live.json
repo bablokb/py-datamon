@@ -2,9 +2,9 @@
   "width": 600,
   "height": 400,
   "title":  "single plot: sin(x) and cos(x)",
-  "x": {"col": 0},
+  "x": {"col": 0, "type": "time"},
   "samples": 200,
-  "xaxis": {"text": "time (s)", "type": "time", 
+  "xaxis": {"text": "time (s)",
             "min": 0, "max": 30, "rescale": "auto"},
   "plots": [
      {"values": [{"col": 1, "label": "sin(x)"},
