@@ -20,6 +20,7 @@ class DMConfigX(types.SimpleNamespace):
 
     # set defaults
     self.col       = 0
+    self.type      = "plain"
     self.normalize = False
     self.scale     = 1
 

@@ -23,7 +23,6 @@ class DMConfigAxis(types.SimpleNamespace):
     self.min       = None
     self.max       = None
     self.rescale   = {"max": "*2.0", "min": "*2.0"}
-    self.type      = "plain"
     self.text_opts = {}
     self.options   = {}
 
