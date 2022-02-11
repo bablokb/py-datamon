@@ -11,6 +11,7 @@
 
 import os, sys, csv, threading, select
 import pandas as pd
+from pandas.api.types import is_numeric_dtype
 import numpy as np
 
 # --- data management for the application   ----------------------------------
@@ -246,8 +247,13 @@ class DMData:
 
     # convert x to date/datetime
     if self._config.x.type in ["date","datetime"]:
-      self._data[self._config.x.col] = pd.to_datetime(
-        self._data[self._config.x.col])
+      if is_numeric_dtype(self._data[self._config.x.col].dtypes):
+        # assume unix-timestamp-value
+        self._data[self._config.x.col] = pd.to_datetime(
+          self._data[self._config.x.col],unit='s')
+      else:
+        self._data[self._config.x.col] = pd.to_datetime(
+          self._data[self._config.x.col])
 
     # ... but convert to numpy-array, because a dataframe is not
     # thread-safe
