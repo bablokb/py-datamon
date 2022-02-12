@@ -30,6 +30,7 @@ class App(object):
 
     self._stop_event = threading.Event()
     self._first      = True
+    self._linenr     = 0
     parser = self._get_parser()
     parser.parse_args(namespace=self)
 
@@ -131,7 +132,7 @@ class App(object):
         break
       if fd_ready:
         line = fd_ready[0].readline().rstrip('\n')
-        self.msg("App: line: %s" % line)
+        #self.msg("App: line: %s" % line)
         if not line:
           if eof:
             read_list.clear()
@@ -147,22 +148,28 @@ class App(object):
   def _handle_line(self,line):
     """ process a single line """
 
+    self._linenr += 1
     if self._first:
       self._ts_1 = datetime.datetime.now()             # save unix-time of 1st line
       self.sep   = csv.Sniffer().sniff(line).delimiter # check for delimiter
       self.msg("App: delimiter is: %s" % self.sep)
       words = line.split(self.sep)
       if len(words) != self.columns:
-        self.msg("App: ignoring incomplete first line")
+        self.msg("App: ignoring incomplete line: %d" % self._linenr,force=True)
         return
       else:
         self._first = False
+        self._linenr -= 1
         self._offset = float(words[self.ts_col])
         self._handle_line(line)
         return
 
-    # calculate timestamp and add column
+    # split line and check if line is complete
     words = line.split(self.sep)
+    if len(words) != self.columns:
+      self.msg("App: ignoring incomplete line: %d" % self._linenr,force=True)
+      return
+    # calculate timestamp and add column
     delta = float(words[self.ts_col]) - self._offset
     ts = self._ts_1 + datetime.timedelta(**{self._scale_key:delta})
     print("%s%s%f" % (line,self.sep,ts.timestamp()),flush=True)
