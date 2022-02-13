@@ -15,6 +15,7 @@ changes. You can deal with the y-axis by providing limits, but this
 does not really work for the x-axis, unless you know your
 measurement-duration in advance.
 
+
 Manual Scaling
 --------------
 
@@ -80,6 +81,9 @@ Rescaling of the y-axis is symetric:
     if current(x) < min: new_min = max - fac*(max-min)
     if current(x) < min: new_min = min - off
 
+_In the current implementation, rescaling does not work for x-data
+with "type" set to "date" or "datetime"._
+
 
 Samples and Scrolling
 ---------------------
@@ -103,3 +107,6 @@ As soon as the number of observations is larger than the limit, the
 data begins to roll, i.e. while data is added at the upper end of the
 scale it is removed at the lower end. Visually this results in the
 scrolling of the plot to the right.
+
+_Currently, the sample size is fixed, i.e. incrementing is not yet
+implemented._

@@ -80,6 +80,7 @@ You can also pass minimum and maximum and rescale, e.g.:
     "yaxis": {"text": "myaxis", "min": 0, "max": 100,
               "rescale": <rescale-definition, optional>}
 
+
 Rescale-Definition
 ------------------
 
@@ -102,6 +103,9 @@ Note that scaling is only relevant for live-plotting, see
 ["Understanding Samples, Scrolling and Rescaling of Axis"](scaling.md)
 for details.
 
+_In the current implementation, rescaling does not work for x-data
+with "type" set to "date" or "datetime"._
+
 
 Sample-Definition
 -----------------
@@ -120,6 +124,9 @@ This sets start and max to the same value.
 
 If not set, the default is the width of the plot in pixels or 500,
 if the width is also not set.
+
+_Currently, the sample size is fixed, i.e. incrementing is not yet
+implemented._
 
 
 Grid-Defintion
@@ -152,7 +159,8 @@ to convert milliseconds to seconds (scale=0.001).
 
 The "type"-attribute will format x-values correctly. A value of "time"
 will format the x-axis as "[hh:]mm:ss", date/datetime will use default
-datetime-formatting of Matplotlib.
+datetime-formatting of Matplotlib. Don't use "normalize" and "scale"
+together with type "date" or "datetime".
 
 
 
