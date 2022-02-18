@@ -115,14 +115,12 @@ class App(object):
   def _process_input(self):
     """ read input, process and output """
 
-    # make sure the open call does not block
     if self.input == "-":
       self.msg("App: reading data from stdin")
       read_list = [sys.stdin]
     else:
       self.msg("App: reading data from %s" % self.input)
-      fd = os.open(self.input,os.O_RDONLY|os.O_NONBLOCK)
-      read_list = [os.fdopen(fd)]
+      read_list = [open(self.input,buffering=1)]
 
     eof = False
     while read_list:
@@ -134,6 +132,7 @@ class App(object):
         line = fd_ready[0].readline().rstrip('\n')
         #self.msg("App: line: %s" % line)
         if not line:
+          # quit after two consecutive empty lines
           if eof:
             read_list.clear()
           else:
@@ -154,8 +153,9 @@ class App(object):
       self.sep   = csv.Sniffer().sniff(line).delimiter # check for delimiter
       self.msg("App: delimiter is: %s" % self.sep)
       words = line.split(self.sep)
-      if len(words) != self.columns:
-        self.msg("App: ignoring incomplete line: %d" % self._linenr,force=True)
+      if len(words) != self.columns or not words[0]:
+        self.msg("App: ignoring incomplete line (%d): %s" %
+                 (self._linenr,line),force=True)
         return
       else:
         self._first = False
@@ -166,8 +166,9 @@ class App(object):
 
     # split line and check if line is complete
     words = line.split(self.sep)
-    if len(words) != self.columns:
-      self.msg("App: ignoring incomplete line: %d" % self._linenr,force=True)
+    if len(words) != self.columns or not words[0]:
+      self.msg("App: ignoring incomplete line (%d): %s" %
+               (self._linenr,line),force=True)
       return
     # calculate timestamp and add column
     delta = float(words[self.ts_col]) - self._offset
