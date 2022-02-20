@@ -11,8 +11,10 @@
 
 import os, sys, csv, threading, select
 import pandas as pd
-from pandas.api.types import is_numeric_dtype
 import numpy as np
+import dateutil
+
+from pandas.api.types import is_numeric_dtype
 
 # --- data management for the application   ----------------------------------
 
@@ -112,6 +114,26 @@ class DMData:
         else:
           self._add_data(line.rstrip())
 
+  # --- convert data   -------------------------------------------------------
+
+  def _convert_data(self,words):
+    """ convert data from string """
+
+    if self._config.x.type in ["date","datetime"]:
+      # manual conversion of data
+      words[self._config.x.col] = dateutil.parser.parse(words[self._config.x.col])
+      for i,word in enumerate(words):
+        if i == self._config.x.col:
+          continue
+        try:
+          words[i] = float(word)
+        except:
+          pass
+      return words
+    else:
+      # automatic conversion
+      return pd.to_numeric(words,errors='coerce')
+
   # --- add data to the internal dataset   -----------------------------------
 
   def _add_data(self,line):
@@ -147,10 +169,11 @@ class DMData:
 
     # self._data already exists
     else:
-      words = line.split(self._delim)
+      words = next(csv.reader([line],delimiter=self._delim))
 
     # convert data
-    data_line = pd.to_numeric(words,errors='coerce')
+    data_line = self._convert_data(words)
+    self.msg("DMData: data_line: %r" % (data_line,))
     if len(data_line) != self._data.shape[1]:
       self.msg("DMData: dropping incomplete line: %r" % (words,))
       return
