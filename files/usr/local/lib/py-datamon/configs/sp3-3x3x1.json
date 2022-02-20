@@ -7,7 +7,7 @@
   "legend": {"loc": null},
   "plots": [
     {"values": [{"col":   1, "label": "Input Voltage"}],
-     "yaxis": {"text": "mV", "min": 15050, "max": 15100},
+     "yaxis": {"text": "mV"},
      "title": "Input Voltage"
     },
     {"values": [{"col":   2, "label": "Input Current"}],
@@ -19,7 +19,7 @@
      "title": "Input Power"
     },
     {"values": [{"col":   5, "label": "Ch0 Voltage"}],
-     "yaxis": {"text": "mV", "min": 5180, "max": 5230},
+     "yaxis": {"text": "mV"},
      "title": "Ch0 Voltage"
     },
     {"values": [{"col":   6, "label": "Ch0 Current"}],
@@ -31,7 +31,7 @@
      "title": "Ch0 Power"
     },
     {"values": [{"col":  10, "label": "Ch1 Voltage"}],
-     "yaxis": {"text": "mV", "min": 5180, "max": 5230},
+     "yaxis": {"text": "mV"},
      "title": "Ch1 Voltage"
     },
     {"values": [{"col":  11, "label": "Ch1 Current"}],
