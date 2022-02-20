@@ -2,6 +2,14 @@
 # ----------------------------------------------------------------------------
 # Class DMData: The data-management class for the application
 #
+# There are two modes of operation:
+#   - synchronous for csv-files, i.e. the DMData.import_file() reads the
+#     data and DMPlot later reads the data
+#   - asynchronous for live-plots. Here a reader thread continuously
+#     reads data into a buffer. DMPlot will call DMData.update() from
+#     a second thread to update the internal numpy-array from the buffer
+#     whenever the function-animation routine is running
+#
 # Author: Bernhard Bablok
 # License: GPL3
 #
@@ -36,6 +44,7 @@ class DMData:
     self.new_data      = False
     self.lock          = threading.Lock()
     self._data         = None
+    self._buffer       = []
     self._min_max      = None
     self._data_labels  = None
     self._index_low    = 0
@@ -47,11 +56,10 @@ class DMData:
   def __getitem__(self,key):
     """ return slice of data """
 
-    with self.lock:
-      if isinstance(key,int):
-        return self._data[self._index_low:self._index_high,key]
-      else:
-        return self._data[key[0],key[1]]
+    if isinstance(key,int):
+      return self._data[self._index_low:self._index_high,key]
+    else:
+      return self._data[key[0],key[1]]
 
   # --- set item   -----------------------------------------------------------
 
@@ -134,10 +142,10 @@ class DMData:
       # automatic conversion
       return pd.to_numeric(words,errors='coerce')
 
-  # --- add data to the internal dataset   -----------------------------------
+  # --- add data to the internal data-buffer   --------------------------------
 
   def _add_data(self,line):
-    """ add data to the dataset """
+    """ add data to the databuffer """
 
     if not line:
       return
@@ -173,44 +181,61 @@ class DMData:
 
     # convert data
     data_line = self._convert_data(words)
-    self.msg("DMData: data_line: %r" % (data_line,))
     if len(data_line) != self._data.shape[1]:
       self.msg("DMData: dropping incomplete line: %r" % (words,))
       return
     self._scale_record(data_line)
 
+    # add to internal buffer
+    with self.lock:
+      self.new_data = True
+      self._buffer.append(data_line)
+
+
+  # --- add data to the internal dataset   -----------------------------------
+
+  def update(self):
+    """ update internal data from buffer (called from DMPlot-thread) """
+
     # resize numpy-buffer if necessary
     if self._index_high == self._data.shape[0]:
-      self._resize_buffer()
+      self._resize_data()
 
-    # add data to dataset
+    # copy buffer to data
     with self.lock:
-      # track min and max
-      if self._index_high == -1:
-        self._min_max.iloc[0] = data_line
-        self._min_max.iloc[1] = data_line
-      else:
-        self._min_max.iloc[2] = data_line                 # current sample
-        self._min_max.iloc[0] = self._min_max.min()       # update minimum
-        self._min_max.iloc[1] = self._min_max.max()       # update maximum
+      n_new = len(self._buffer)
+      self.msg("DMData: updating data with %d samples from buffer" % n_new)
 
-      # roll data if necessary
-      if self._index_high == self._data.shape[0]-1:
-        self._data = np.roll(self._data,-1,0)
-        self._min_max[0][self._config.x.col] = self._data[0][self._config.x.col]
-        self._min_max[1][self._config.x.col] = self._data[self._index_high][self._config.x.col]
-      else:
-        self._index_high += 1
+      for data_line in self._buffer:
+        # track min and max
+        if self._index_high == -1:
+          self._min_max.iloc[0] = data_line
+          self._min_max.iloc[1] = data_line
+        else:
+          self._min_max.iloc[2] = data_line                 # current sample
+          self._min_max.iloc[0] = self._min_max.min()       # update minimum
+          self._min_max.iloc[1] = self._min_max.max()       # update maximum
 
-      # finally save new observation
-      self.new_data = True
-      self._data[self._index_high,:] = data_line
+        # roll data if necessary
+        if self._index_high == self._data.shape[0]-1:
+          self._data = np.roll(self._data,-1,0)
+          self._min_max[0][self._config.x.col] = self._data[0][self._config.x.col]
+          self._min_max[1][self._config.x.col] = self._data[self._index_high][self._config.x.col]
+        else:
+          self._index_high += 1
 
-  # --- resize numpy-buffer   ------------------------------------------------
+        # finally save new observation
+        self._data[self._index_high,:] = data_line
 
-  def _resize_buffer(self):
-    """ resize numpy buffer """
+      # reset buffer and return lines added
+      self._buffer = []
+      self.new_data = False
+      return n_new
 
+  # --- resize numpy-array   --------------------------------------------------
+
+  def _resize_data(self):
+    """ resize numpy array """
     pass
 
   # --- scale and normalize record   -----------------------------------------

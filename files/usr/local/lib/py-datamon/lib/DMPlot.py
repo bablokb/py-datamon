@@ -111,9 +111,9 @@ class DMPlot:
       # unsupported
       return current
 
-  # --- update the plot-data   -----------------------------------------------
+  # --- update the plot   ----------------------------------------------------
 
-  def _update(self,have_new):
+  def _update_plot(self,have_new):
     """ update-function for animation """
 
     if have_new:
@@ -164,15 +164,13 @@ class DMPlot:
     # always return the line-artists, or else the animation fails
     return self._lines
 
-  # --- check for new data   -------------------------------------------------
+  # --- update the data   ----------------------------------------------------
 
-  def _check_new(self):
+  def _update_data(self):
     """ frames-function for animation """
 
     while True:
-      with self._data.lock:
-        have_new = self._data.new_data
-        self._data.new_data = False
+      have_new = self._data.update() > 0
       yield have_new
 
   # --- format x as time   ---------------------------------------------------
@@ -265,8 +263,8 @@ class DMPlot:
       self.msg("DMPlot: %s created" % self._img_file,force=True)
     elif self._config.is_live:
       ani = animation.FuncAnimation(fig,
-                                    self._update,
-                                    self._check_new,
+                                    self._update_plot,
+                                    self._update_data,
                                     interval=self._freq,
                                     blit=True)
       plt.show()
