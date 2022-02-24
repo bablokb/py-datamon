@@ -266,6 +266,8 @@ class DMPlot:
                                     self._update_plot,
                                     self._update_data,
                                     interval=self._freq,
+                                    repeat=False,
+                                    cache_frame_data=False,
                                     blit=True)
       plt.show()
     else:
