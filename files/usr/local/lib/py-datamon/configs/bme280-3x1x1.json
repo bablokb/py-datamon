@@ -6,15 +6,15 @@
   "xaxis": "time (sec)",
   "plots": [
     {"values": [{"col":   1, "label": "Temperature (°C)"}],
-     "yaxis": "°C",
+     "yaxis": {"text": "°C", "min": 10, "max": 40},
      "title": "Temperature (°C)"
     },
     {"values": [{"col":   2, "label": "Pressure (hPa)"}],
-     "yaxis": "hPa",
+     "yaxis": {"text": "hPa", "min": 900, "max": 1100},
      "title": "Pressure (hPa)"
     },
     {"values": [{"col":   3, "label": "Humidity (%)"}],
-     "yaxis": "%",
+     "yaxis": {"text": "%", "min": 20, "max": 80},
      "title": "Humidity (%)"
     }
    ]
