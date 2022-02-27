@@ -34,13 +34,8 @@ class App(object):
     parser = self._get_parser()
     parser.parse_args(namespace=self)
 
-    # get key for ts-scale
-    dict_map = {'s': 'seconds','ms': 'milliseconds', 'us': 'microseconds'}
-    self._scale_key = dict_map[self.ts_scale]
-
     # fix values
     self.columns = int(self.columns)
-    self.ts_col  = int(self.ts_col)
     
   # --- cmdline-parser   -----------------------------------------------------
 
@@ -51,12 +46,6 @@ class App(object):
 
     parser.add_argument('-c', '--columns', metavar='columns',
       help='expected number of colums')
-    parser.add_argument('-t', '--ts-col', metavar='ts-col',
-      dest='ts_col', default=0, help='column of timestamp (default: 0)')
-    parser.add_argument('-s', '--ts-scale', metavar='ts_scale',
-                        choices=['s','ms','us'],
-                        default='ms',
-                        help='timestamp-scale s|ms|us (default: ms)')
 
     parser.add_argument('-f', '--ts-format', metavar='ts-format',
       dest='ts_format', default='i', nargs='?',
