@@ -34,8 +34,10 @@ class App(object):
     parser = self._get_parser()
     parser.parse_args(namespace=self)
 
-    # fix values
-    self.columns = int(self.columns)
+    # check values
+    if not self.columns:
+      self.msg("error: need to specify columns (option -c)",force=True)
+      sys.exit(3)
     
   # --- cmdline-parser   -----------------------------------------------------
 
@@ -45,7 +47,8 @@ class App(object):
     parser = ArgumentParser(add_help=False,description='Python Datareader')
 
     parser.add_argument('-c', '--columns', metavar='columns',
-      help='expected number of colums')
+                        type=int, default=0,
+                        help='expected number of colums')
 
     parser.add_argument('-f', '--ts-format', metavar='ts-format',
       dest='ts_format', default='i', nargs='?',
