@@ -34,8 +34,8 @@ class DMConfigSubplot(types.SimpleNamespace):
     super(DMConfigSubplot,self).__init__(**conf)
 
     # fix attributes if defaults were overridden
-    if isinstance(self.x,dict):
-      self.x  = types.SimpleNamespace(**self.x)
+    if not isinstance(self.x,DMConfigX):
+      self.x  = DMConfigX(app,self.x)
     if not isinstance(self.xaxis,DMConfigAxis):
       self.xaxis = DMConfigAxis(app,self.xaxis)
     if not isinstance(self.yaxis,DMConfigAxis):
