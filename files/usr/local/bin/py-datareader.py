@@ -51,12 +51,16 @@ class App(object):
 
     parser.add_argument('-c', '--columns', metavar='columns',
       help='expected number of colums')
-    parser.add_argument('-t', '--ts-col', metavar='ts_col',
-      default=0, help='column of timestamp (default: 0)')
+    parser.add_argument('-t', '--ts-col', metavar='ts-col',
+      dest='ts_col', default=0, help='column of timestamp (default: 0)')
     parser.add_argument('-s', '--ts-scale', metavar='ts_scale',
                         choices=['s','ms','us'],
                         default='ms',
                         help='timestamp-scale s|ms|us (default: ms)')
+
+    parser.add_argument('-f', '--ts-format', metavar='ts-format',
+      dest='ts_format', default='i', nargs='?',
+      help="timestamp-format (i=iso, u=unix, or generic format, default: i)")
 
     parser.add_argument('-d', '--debug', action='store_true',
       dest='debug', default=False,
@@ -149,7 +153,6 @@ class App(object):
 
     self._linenr += 1
     if self._first:
-      self._ts_1 = datetime.datetime.now()             # save unix-time of 1st line
       self.sep   = csv.Sniffer().sniff(line).delimiter # check for delimiter
       self.msg("App: delimiter is: %s" % self.sep)
       words = line.split(self.sep)
@@ -160,7 +163,6 @@ class App(object):
       else:
         self._first = False
         self._linenr -= 1
-        self._offset = float(words[self.ts_col])
         self._handle_line(line)
         return
 
@@ -170,10 +172,16 @@ class App(object):
       self.msg("App: ignoring incomplete line (%d): %s" %
                (self._linenr,line),force=True)
       return
+
     # calculate timestamp and add column
-    delta = float(words[self.ts_col]) - self._offset
-    ts = self._ts_1 + datetime.timedelta(**{self._scale_key:delta})
-    print("%s%s%f" % (line,self.sep,ts.timestamp()),flush=True)
+    if self.ts_format == 'i':
+      ts = '"{}"'.format(datetime.datetime.now().isoformat())
+    elif self.ts_format == 'u':
+      ts = str(datetime.datetime.now().timestamp())
+    else:
+      ts = '"{}"'.format(datetime.datetime.now().strftime(self.ts_format))
+
+    print("%s%s%s" % (line,self.sep,ts),flush=True)
       
       
 # --- main program   ---------------------------------------------------------
