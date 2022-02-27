@@ -10,7 +10,7 @@
 # ----------------------------------------------------------------------------
 
 import types
-from lib import DMConfigValue, DMConfigAxis
+from lib import DMConfigValue, DMConfigAxis, DMConfigX
 
 # --- configuration-object for subplots   ------------------------------------
 
