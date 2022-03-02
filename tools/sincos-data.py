@@ -22,17 +22,20 @@ i     = count
 y     = [None for n in range(6)]
 t0    = time.perf_counter()
 
-while True:
-  t = time.perf_counter() - t0
-  y[0] = math.sin(t)
-  y[1] = math.cos(t)
-  y[2] = y[0] + y[1]
-  y[3] = y[0] + random.normalvariate(0,0.15)
-  y[4] = y[1] + random.normalvariate(0,0.151)
-  y[5] = y[3] + y[4]
-  print("%f,%s" % (t,",".join(map(str,y))),flush=True)
-  i -= 1
-  if i == 0:
-    break
-  delta = time.perf_counter() - t
-  time.sleep(delay-delta/100000000)
+try:
+  while True:
+    t = time.perf_counter() - t0
+    y[0] = math.sin(t)
+    y[1] = math.cos(t)
+    y[2] = y[0] + y[1]
+    y[3] = y[0] + random.normalvariate(0,0.15)
+    y[4] = y[1] + random.normalvariate(0,0.151)
+    y[5] = y[3] + y[4]
+    print("%f,%s" % (t,",".join(map(str,y))),flush=True)
+    i -= 1
+    if i == 0:
+      break
+    delta = time.perf_counter() - t
+    time.sleep(delay-delta/100000000)
+except:
+  pass
