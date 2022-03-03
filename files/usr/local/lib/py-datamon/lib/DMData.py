@@ -129,14 +129,13 @@ class DMData:
 
     if self._config.x.type in ["date","datetime"]:
       # manual conversion of data
-      words[self._config.x.col] = dateutil.parser.parse(words[self._config.x.col])
       for i,word in enumerate(words):
-        if i == self._config.x.col:
-          continue
         try:
           words[i] = float(word)
         except:
-          pass
+          if i == self._config.x.col:
+            words[self._config.x.col] = dateutil.parser.parse(
+                                                 words[self._config.x.col])
       return words
     else:
       # automatic conversion
