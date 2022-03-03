@@ -9,7 +9,7 @@
 #
 # ----------------------------------------------------------------------------
 
-import time, traceback
+import datetime, time, traceback
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.dates as mdates
@@ -173,10 +173,14 @@ class DMPlot:
       have_new = self._data.update() > 0
       yield have_new
 
-  # --- format x as time   ---------------------------------------------------
+  # --- format x as time/date/datetime   -------------------------------------
 
-  def _fmt_time(self,x):
+  def _fmt_time(self,x,type):
     """ format x-value as [hh:]mm:ss.mmm """
+
+    if type in ["date","datetime"]:
+      val = datetime.datetime.fromtimestamp(x)
+      return val.strftime("%x %X")
 
     x,frac = divmod(x,1)
     m, s = divmod(int(x),60)
@@ -215,8 +219,10 @@ class DMPlot:
       self.msg("DMPLot: plotting subplot[%d][%d]" % (r,c))
 
       # ... configure axis
-      if plot_cfg.x.type == "time":
-        axs[r][c].xaxis.set_major_formatter(lambda x, pos: self._fmt_time(x))
+      if plot_cfg.x.type == "time" or (
+        plot_cfg.x.type in ["date","datetime"] and self._config.is_live):
+        axs[r][c].xaxis.set_major_formatter(
+                           lambda x, pos: self._fmt_time(x,plot_cfg.x.type))
         axs[r][c].tick_params(axis='x',labelrotation=45)
       elif plot_cfg.x.type == "date":
         locator = mdates.AutoDateLocator()
