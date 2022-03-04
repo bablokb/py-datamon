@@ -134,8 +134,10 @@ class DMData:
           words[i] = float(word)
         except:
           if i == self._config.x.col:
-            words[self._config.x.col] = dateutil.parser.parse(
-                                                 words[self._config.x.col])
+            words[i] = dateutil.parser.parse(words[i]).timestamp()
+          else:
+            # make numeric (expect char-columns to be ignored anyhow)
+            words[i] = 0
       return words
     else:
       # automatic conversion
@@ -155,7 +157,7 @@ class DMData:
       # guess delimiter and split line
       self._delim,_ = self._get_delim(line=line)
       self.msg("DMData: delimiter is: '%s'" % self._delim)
-      words = line.split(self._delim)
+      words = next(csv.reader([line],delimiter=self._delim))
 
       # estimate buffer size and create numpy-buffer
       if self._config.samples:
@@ -245,12 +247,12 @@ class DMData:
     # normalize data (i.e. first observation to timestamp = 0)
     if self._config.x.normalize:
       if self._x_low < 0:
-        self._x_low = record[0]
-      record[0] -= self._x_low
+        self._x_low = record[self._config.x.col]
+      record[self._config.x.col] -= self._x_low
 
     # scale data (eg. from ms to s)
     if self._config.x.scale != 1:
-      record[0] *= self._config.x.scale
+      record[self._config.x.col] *= self._config.x.scale
 
   # --- scale and normalize x-axis data   ------------------------------------
 
