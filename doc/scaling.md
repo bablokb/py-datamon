@@ -70,8 +70,8 @@ Rescaling changes the limits of the xaxis using the following logic:
     if current(x) > max: new_max = min + fac*(max-min)
     if current(x) > max: new_max = max + off
 
-    if min(x) > fac*min:   new_min = current
-    if min(x) > min + off: new_min = current
+    if current(x) > fac*min:   new_min = current
+    if current(x) > min + off: new_min = current
 
 Rescaling of the y-axis is symetric:
 
