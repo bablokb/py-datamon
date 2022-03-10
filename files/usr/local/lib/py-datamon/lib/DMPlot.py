@@ -178,12 +178,12 @@ class DMPlot:
 
   # --- format x as time/date/datetime   -------------------------------------
 
-  def _fmt_time(self,x,type):
+  def _fmt_time(self,x,x_config):
     """ format x-value as [hh:]mm:ss.mmm """
 
-    if type in ["date","datetime"]:
+    if x_config.type in ["date","datetime"]:
       val = datetime.datetime.fromtimestamp(x)
-      return val.strftime("%x %X")
+      return val.strftime(x_config.format)
 
     x,frac = divmod(x,1)
     m, s = divmod(int(x),60)
@@ -225,7 +225,7 @@ class DMPlot:
       if plot_cfg.x.type == "time" or (
         plot_cfg.x.type in ["date","datetime"] and self._config.is_live):
         axs[r][c].xaxis.set_major_formatter(
-                           lambda x, pos: self._fmt_time(x,plot_cfg.x.type))
+                           lambda x, pos: self._fmt_time(x,plot_cfg.x))
         axs[r][c].tick_params(axis='x',labelrotation=45)
       elif plot_cfg.x.type == "date":
         locator = mdates.AutoDateLocator()
