@@ -130,8 +130,11 @@ class DMPlot:
           if tmin > xmin:
             new_min = self._new_xmin(plot_cfg.xaxis.rescale,xmin,tmin)
             if new_min > xmin:
-              self._axs[i_ax].set_xlim(left=new_min)
+              if xmax-tmax < new_min-xmin or xmax < new_min:
+                # shift xmax by the same amount
+                xmax = xmax + new_min-xmin
               xmin = new_min
+              self._axs[i_ax].set_xlim(left=xmin,right=xmax)
               redraw = True
           if tmax > xmax:
             new_max = self._new_xmax(plot_cfg.xaxis.rescale,xmin,xmax,tmax)
