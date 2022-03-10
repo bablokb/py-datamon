@@ -155,12 +155,18 @@ to convert milliseconds to seconds (scale=0.001).
     "x": {"col":       <optional, data-column x-value, default: 0>,
           "normalize": <optional, default false>,
           "scale":     <optional, default 1>,
-          "type": <plain|time|date|datetime>, optional, default: plain}
+          "type": <plain|time|date|datetime|datetime-generic>,
+                  optional, default: plain}
 
 The "type"-attribute will format x-values correctly. A value of "time"
-will format the x-axis as "[hh:]mm:ss", date/datetime will use default
-datetime-formatting of Matplotlib. Don't use "normalize" and "scale"
-together with type "date" or "datetime".
+will format the x-axis as "[hh:]mm:ss", "date"/"datetime" will use default
+(date)time-formatting of python. "datetime-generic" has the format
+
+    datetime-generic(format)
+
+where "format" is a valid format for `datetime.strftime`.
+
+Don't use "normalize" and "scale" together with type "date" or "datetime".
 
 
 
