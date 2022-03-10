@@ -21,8 +21,15 @@ class DMConfigX(types.SimpleNamespace):
     # set defaults
     self.col       = 0
     self.type      = "plain"
+    self.format    = None       # ignored unless date/datime + live-plot
     self.normalize = False
     self.scale     = 1
 
     # override with data from config-file
     super(DMConfigX,self).__init__(**conf)
+
+    if self.format is None and self.type in ["date","datetime"]:
+      if self.type == "datetime":
+        self.format = "%x %X"
+      else:
+        self.format = "%x"
