@@ -148,26 +148,27 @@ X-Value-Definition
 The definition of the x-value is optional and defaults to the
 first column (i.e. column zero) with label "time".
 
-Setting "normalize" to true shifts the data to the left, so the time
-axis starts at 0. An optional "scale"-value will scale the data, e.g.
-to convert milliseconds to seconds (scale=0.001).
-
     "x": {"col":       <optional, data-column x-value, default: 0>,
           "normalize": <optional, default false>,
           "scale":     <optional, default 1>,
-          "type": <plain|time|date|datetime|datetime-generic>,
-                  optional, default: plain}
+          "type":      <optional, plain|time|date|datetime, default: plain>,
+          "format":    <optional, date/datetime-strftime-format}
 
-The "type"-attribute will format x-values correctly. A value of "time"
-will format the x-axis as "[hh:]mm:ss", "date"/"datetime" will use default
-(date)time-formatting of python. "datetime-generic" has the format
+Setting "normalize" to `true` shifts the data to the left, so the time
+axis starts at 0. An optional "scale"-value will scale the data, e.g.
+to convert milliseconds to seconds provide `"scale": 0.001`.
 
-    datetime-generic(format)
+The "type"-attribute will help to format x-values correctly.
 
-where "format" is a valid format for `datetime.strftime`.
+A value of "time" (in the sense of "elapsed-time") will format the x-axis
+as "[hh:]mm:ss". If the scale of your x-axis is not in seconds, you also
+need to specify "normalize" and "scale".
+
+The formatting of "date"/"datetime" depends on the context. For live-plots,
+the format used is "%x"/"%x %X" unless the "format"-attribute is provided.
+Plots of csv-files (static plots) will use default formatting of Mathplotlib.
 
 Don't use "normalize" and "scale" together with type "date" or "datetime".
-
 
 
 Value-Definition
