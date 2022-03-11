@@ -14,6 +14,9 @@
 
 import sys, time, math, random
 
+from signal import signal, SIGPIPE, SIG_DFL
+signal(SIGPIPE,SIG_DFL) 
+
 random.seed()
 
 delay = float(sys.argv[1]) if len(sys.argv) > 1 else 0
