@@ -145,13 +145,20 @@ class DMPlot:
           for value in plot_cfg.values:
             # check if a redraw is necessary
             (vmin,vmax) = self._data.minmax(value.col)
-            if not plot_cfg.yaxis.min and vmin < ymin:
-              new_min = self._new_ylim(plot_cfg.yaxis.rescale.min,ymin,ymax,vmin)
-              self._axs[i_ax].set_ylim(bottom=new_min)
+            if value.axis == 1:
+              cfg_yaxis = plot_cfg.yaxis
+              axs       = self._axs[i_ax]
+            else:
+              cfg_yaxis = plot_cfg.yaxis2
+              axs       = self._axs[i_ax].yaxis2
+
+            if not cfg_yaxis.min and vmin < ymin:
+              new_min = self._new_ylim(cfg_yaxis.rescale.min,ymin,ymax,vmin)
+              axs.set_ylim(bottom=new_min)
               redraw = True
-            if not plot_cfg.yaxis.max and vmax > ymax:
-              new_max = self._new_ylim(plot_cfg.yaxis.rescale.max,ymin,ymax,vmax)
-              self._axs[i_ax].set_ylim(top=new_max)
+            if not cfg_yaxis.max and vmax > ymax:
+              new_max = self._new_ylim(cfg_yaxis.rescale.max,ymin,ymax,vmax)
+              axs.set_ylim(top=new_max)
               redraw = True
             # update values
             self._lines[i_line].set_data(self._data[plot_cfg.x.col], # synchronized in
@@ -241,9 +248,21 @@ class DMPlot:
       if plot_cfg.yaxis.max:
         axs[r][c].set_ylim(top=plot_cfg.yaxis.max)
 
-      # ... and plot axis-label
+      # ... and plot title and axis-labels
+      axs[r][c].set_title(plot_cfg.title,**plot_cfg.title_opts)
       axs[r][c].set_xlabel(plot_cfg.xaxis.text,**plot_cfg.xaxis.text_opts)
       axs[r][c].set_ylabel(plot_cfg.yaxis.text,**plot_cfg.yaxis.text_opts)
+
+      # second y-axis
+
+      if plot_cfg.yaxis2:
+        yaxis2 = axs[r][c].twinx()
+        axs[r][c].yaxis2 = yaxis2              # keep reference for live plots
+        if plot_cfg.yaxis2.min:
+          yaxis2.set_ylim(bottom=plot_cfg.yaxis2.min)
+        if plot_cfg.yaxis2.max:
+          yaxis2.set_ylim(top=plot_cfg.yaxis2.max)
+        yaxis2.set_ylabel(plot_cfg.yaxis2.text,**plot_cfg.yaxis2.text_opts)
 
       # ... and plot grid
       axs[r][c].grid(visible=plot_cfg.grid,**plot_cfg.grid_opts)
@@ -255,16 +274,23 @@ class DMPlot:
 
       # ... plot 1..n y-values
       for value in plot_cfg.values:
-        line = axs[r][c].plot(self._data[plot_cfg.x.col],
-                              self._data[value.col],
-                              label = value.label,
-                              **value.options)
-        axs[r][c].set_title(plot_cfg.title,**plot_cfg.title_opts)
+        if value.axis == 1:
+          line = axs[r][c].plot(self._data[plot_cfg.x.col],
+                                self._data[value.col],
+                                label = value.label,
+                                **value.options)
+        else:
+          line = yaxis2.plot(self._data[plot_cfg.x.col],
+                          self._data[value.col],
+                          label = value.label,
+                          **value.options)
         self._lines.append(line[0])
 
       # ... plot legend
       if plot_cfg.legend["loc"]:
         axs[r][c].legend(**plot_cfg.legend)
+        if plot_cfg.yaxis2:
+          yaxis2.legend(**plot_cfg.legend)
 
     # show plot
     if self._img_file:
