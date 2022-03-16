@@ -122,7 +122,6 @@ class DMPlot:
         i_line = 0
         i_ax   = 0
         for plot_cfg in self._config.plots:
-          (ymin,ymax) = self._axs[i_ax].get_ylim()
           (xmin,xmax) = self._axs[i_ax].get_xlim()
           (tmin,tmax) = self._data.minmax(plot_cfg.x.col)
 
@@ -152,6 +151,7 @@ class DMPlot:
               cfg_yaxis = plot_cfg.yaxis2
               axs       = self._axs[i_ax].yaxis2
 
+            (ymin,ymax) = axs.get_ylim()
             if not cfg_yaxis.min and vmin < ymin:
               new_min = self._new_ylim(cfg_yaxis.rescale.min,ymin,ymax,vmin)
               axs.set_ylim(bottom=new_min)
