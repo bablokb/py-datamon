@@ -78,7 +78,10 @@ The simplified form is:
 You can also pass minimum and maximum and rescale, e.g.:
 
     "yaxis": {"text": "myaxis", "min": 0, "max": 100,
+              "axis": <1|2, optional, default: 1>,
               "rescale": <rescale-definition, optional>}
+
+If `"axis": 2` is set, the axis will be on the right as a second axis.
 
 
 Rescale-Definition
@@ -179,8 +182,11 @@ The values-definition is a dictionary:
     {"col":   <column-number within csv-data>,
      "label": <"text", optional>,
      "color": <line-color, optional>,
+     "axis":  <1|2, optional, default: 1>,
      "options": <optional, kw_args for matplotlib.pyplot.plot()>
     }
+
+If `"axis": 2` is set, the values will be for the second axis.
 
 
 Text-Options
