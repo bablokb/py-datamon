@@ -19,6 +19,7 @@ class DMConfigAxis(types.SimpleNamespace):
     self.msg = app.msg
 
     # set defaults
+    self.axis      = 1
     self.text      = ""
     self.min       = None
     self.max       = None

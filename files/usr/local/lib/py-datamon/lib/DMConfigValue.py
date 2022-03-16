@@ -19,6 +19,7 @@ class DMConfigValue(types.SimpleNamespace):
     self.msg = app.msg
 
     # set defaults
+    self.axis       = 1
     self.label      = ""
     self.label_opts = {}
     self.options    = {}
