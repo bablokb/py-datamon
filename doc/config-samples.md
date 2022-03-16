@@ -94,6 +94,15 @@ modified to reflect the specific application-example.)
 ![](../images/sp3-2x1x2.png)
 
 
+sp3-ch0.json
+------------
+
+This configuration (again for Smart-Power-3) will plot
+voltage and current of channel 0 in a single plot with two axes.
+
+![](../images/sp3-ch0.png)
+
+
 bme280-3x1x1.json
 -----------------
 
