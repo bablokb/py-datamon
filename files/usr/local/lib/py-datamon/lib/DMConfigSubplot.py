@@ -27,6 +27,7 @@ class DMConfigSubplot(types.SimpleNamespace):
     self.x          = cfg_plot.x
     self.xaxis      = cfg_plot.xaxis
     self.yaxis      = cfg_plot.yaxis
+    self.yaxis2     = cfg_plot.yaxis2
     self.grid       = cfg_plot.grid
     self.grid_opts  = cfg_plot.grid_opts
 
@@ -40,6 +41,8 @@ class DMConfigSubplot(types.SimpleNamespace):
       self.xaxis = DMConfigAxis(app,self.xaxis)
     if not isinstance(self.yaxis,DMConfigAxis):
       self.yaxis = DMConfigAxis(app,self.yaxis)
+    if self.yaxis2 and not isinstance(self.yaxis2,DMConfigAxis):
+      self.yaxis2 = DMConfigAxis(app,self.yaxis2)
 
     # parse configuration for y-values
     self.msg("DMConfigSubplot: parsing config for %d y-values" % len(self.values))

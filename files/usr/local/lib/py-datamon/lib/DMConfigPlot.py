@@ -35,6 +35,7 @@ class DMConfigPlot(types.SimpleNamespace):
     self.samples    = None
     self.xaxis      = {"text": "time (ms)"}
     self.yaxis      = {"text": "value"}
+    self.yaxis2     = None
     self.grid       = True
     self.grid_opts  = {"which": "both","axis": "both"}
 
@@ -45,6 +46,8 @@ class DMConfigPlot(types.SimpleNamespace):
     self.x     = DMConfigX(app,self.x)
     self.xaxis = DMConfigAxis(app,self.xaxis)
     self.yaxis = DMConfigAxis(app,self.yaxis)
+    if self.yaxis2:
+      self.yaxis2 = DMConfigAxis(app,self.yaxis2)
 
     # parse configuration for subplots
     self.msg("DMConfigPlot: parsing config for %d subplots" % len(self.plots))
