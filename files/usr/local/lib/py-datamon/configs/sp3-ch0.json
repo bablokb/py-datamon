@@ -1,0 +1,17 @@
+{ "cols": 1,
+  "width": 1600,
+  "height": 400,
+  "title":  "Smartpower 3",
+  "x": {"col":   0, "type": "time", "normalize": true, "scale": 0.001},
+  "xaxis": {"text": "time (sec)", "rescale": {"min": "+30", "max": "+60"}},
+  "yaxis": {"text": "mV",  "color": "blue"},
+  "yaxis2": {"text": "mA", "color": "red"},
+  "legend": {"loc": null},
+  "plots": [
+    {"values": [{"col":   5, "label": "Ch0 Voltage", "color": "blue"},
+                {"col":   6, "axis": 2, "label": "Ch0 Current", "color": "red"}
+               ],
+     "title": "Channel 0 Voltage and Current"
+    }
+   ]
+}
