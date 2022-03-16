@@ -27,6 +27,7 @@ of all subplots:
      "samples": <optional, samples-definition>,
      "xaxis":   <optional, axis-definition>,
      "yaxis":   <optional, axis-definition>,
+     "yaxis2":  <optional, axis-definition>,
      "grid":    <optional, see matplotlib.pyplot.grid()>,
      "legend"   <optional, kw_args for matplotlib.pyplot.legend()>,
      "plots":   [plot_1,
@@ -34,6 +35,8 @@ of all subplots:
                  plot_n
                 ]
     }
+
+If yaxis2 is set, the axis will be on the right as a second axis.
 
 The most basic configuration would be something like this:
 
@@ -54,13 +57,14 @@ Each subplot is a dictionary:
     {"title":  <"text", optional>,
      "legend": <optional, kw_args for matplotlib.pyplot.legend()>
      "xaxis":  <axis-definition>
-     "yaxis":  <axis-definition, optional>
-     "grid":    <optional, see matplotlib.pyplot.grid()>
+     "yaxis":  <optional, axis-definition>,
+     "yaxis2": <optional, axis-definition>,
+     "grid":   <optional, see matplotlib.pyplot.grid()>
      "values": [value_definition_1,...,value_definition_n],
     }
 
 A legend-definition for a subplot overrides the legend-definition on
-plot level. The same holds true for grid, xaxis and yaxis.
+plot level. The same holds true for grid, xaxis and yaxis, yaxis2.
 
 To disable legends, use
 
@@ -78,10 +82,7 @@ The simplified form is:
 You can also pass minimum and maximum and rescale, e.g.:
 
     "yaxis": {"text": "myaxis", "min": 0, "max": 100,
-              "axis": <1|2, optional, default: 1>,
               "rescale": <rescale-definition, optional>}
-
-If `"axis": 2` is set, the axis will be on the right as a second axis.
 
 
 Rescale-Definition
