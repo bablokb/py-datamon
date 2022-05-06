@@ -185,6 +185,11 @@ if __name__ == '__main__':
 
   # create client-class and parse arguments
   app = App()
-  app.run()
-  signal.pause()
-  app.cleanup()
+  try:
+    app.run()
+    signal.pause()
+  except BrokenPipeError:
+    devnull = os.open(os.devnull, os.O_WRONLY)
+    os.dup2(devnull, sys.stdout.fileno())
+  finally:
+    app.cleanup()
