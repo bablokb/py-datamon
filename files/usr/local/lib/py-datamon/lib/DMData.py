@@ -80,7 +80,12 @@ class DMData:
       return csv.Sniffer().sniff(line).delimiter,line
     else:
       with open(file,'rt') as csvfile:
-        line = csvfile.readline().rstrip('\n')
+        while True:
+          line = csvfile.readline().rstrip('\n')
+          if line.startswith('#'):
+            continue
+          else:
+            break
         return self._get_delim(line=line)
 
   # --- guess if words contain data or a header   ----------------------------
@@ -287,7 +292,8 @@ class DMData:
 
     # using pandas to read the data, because it is more robust
     # then np.genfromtxt ...
-    self._data = pd.read_csv(file,header=None,skiprows=skiprows,sep=delim)
+    self._data = pd.read_csv(file,header=None,comment='#',
+                             skiprows=skiprows,sep=delim)
     if self.debug:
       self.msg("DMData: total data-rows: %d" % self._data.shape[0])
       print("-"*75)
