@@ -73,20 +73,22 @@ class DMData:
 
   # --- get delimiter of csv-data   ------------------------------------------
 
-  def _get_delim(self,file=None,line=None):
+  def _get_delim(self,file=None,line=None,headers=0):
     """ guess delimiter by sniffing the given line """
 
     if file is None:
-      return csv.Sniffer().sniff(line).delimiter,line
+      return csv.Sniffer().sniff(line).delimiter,line,headers
     else:
       with open(file,'rt') as csvfile:
+        n_comments = 0
         while True:
           line = csvfile.readline().rstrip('\n')
           if line.startswith('#'):
+            n_comments += 1
             continue
           else:
             break
-        return self._get_delim(line=line)
+        return self._get_delim(line=line,headers=n_comments)
 
   # --- guess if words contain data or a header   ----------------------------
 
@@ -124,6 +126,8 @@ class DMData:
         line = fd_ready[0].readline().rstrip('\n')
         if not line:             # EOF, remove file from input list
           read_list.clear()
+        elif line.startswith('#'):
+          continue
         else:
           self._add_data(line.rstrip())
 
@@ -160,7 +164,7 @@ class DMData:
     # check for initial state
     if self._data is None:
       # guess delimiter and split line
-      self._delim,_ = self._get_delim(line=line)
+      self._delim,_,_ = self._get_delim(line=line)
       self.msg("DMData: delimiter is: '%s'" % self._delim)
       words = next(csv.reader([line],delimiter=self._delim))
 
@@ -279,8 +283,9 @@ class DMData:
     """ read data from csv file """
 
     self.msg("DMData: reading data from %s" % file)
-    delim,line = self._get_delim(file=file)
+    delim,line,header_comments = self._get_delim(file=file)
     self.msg("DMData: delimiter is: '%s'" % delim)
+    self.msg("DMData: header comments: %d" % header_comments)
 
     # check for header line: no field is numeric
     words = line.split(delim)
@@ -293,7 +298,7 @@ class DMData:
     # using pandas to read the data, because it is more robust
     # then np.genfromtxt ...
     self._data = pd.read_csv(file,header=None,comment='#',
-                             skiprows=skiprows,sep=delim)
+                             skiprows=skiprows+header_comments,sep=delim)
     if self.debug:
       self.msg("DMData: total data-rows: %d" % self._data.shape[0])
       print("-"*75)
