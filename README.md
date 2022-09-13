@@ -1,6 +1,8 @@
 Realtime Python Datamonitor
 ===========================
 
+![](images/sp3-2x1x2.png)
+
 Introduction
 ------------
 
@@ -48,8 +50,12 @@ To test the program, run these commands:
     # create plot with 3x2 subplots, one value each
     /usr/local/bin/py-datamon -c sincos3x2x1.json testdata.csv
 
+![](images/sincos3x2x1.png)
+
     # or all values in a single subplot
     /usr/local/bin/py-datamon -c sincos1x1x6.json testdata.csv
+
+![](images/sincos1x1x6.png)
 
 To test the live-monitoring, use
 
