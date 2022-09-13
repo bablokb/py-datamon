@@ -18,12 +18,16 @@ default.json
 A very minimal example. It plots the first two columns of the data.
 
 
-sincos1.json
-------------
+sincos1.json / sincos1-dt.json
+------------------------------
 
 A single plot with two values (x-axis formatted as time).
 
 ![](../images/sincos1.png)
+
+The "-dt" version formats the x-axis as datetime and assumes an
+additional datetime-column
+(added with `files/usr/local/bin/py-datareader.py`).
 
 
 sincos2.json
@@ -70,8 +74,8 @@ Configuration tweaks:
 ![](../images/sincos3x2x1.png)
 
 
-sp3-3x3x1.json
---------------
+sp3-3x3x1.json / sp3-dt-3x3x1.json
+----------------------------------
 
 A configuration for [Hardkernel's "Smart-Power-3"-system](https://wiki.odroid.com/accessory/power_supply_battery/smartpower3).
 
@@ -81,6 +85,10 @@ row with channel-1 data. (Note that for the image the title and labels were
 modified to reflect the specific application-example.)
 
 ![](../images/sp3-3x3x1.png)
+
+The "-dt" version formats the x-axis as datetime and assumes an
+additional datetime-column
+(added with `files/usr/local/bin/py-datareader.py`).
 
 
 sp3-2x1x2.json
@@ -103,7 +111,12 @@ voltage and current of channel 0 in a single plot with two axes.
 ![](../images/sp3-ch0.png)
 
 
-bme280-3x1x1.json
------------------
+bme280-3x1x1.json / bme280-dt-3x1.1.json
+----------------------------------------
 
 Configuration for the BME280 sensor with temperature, pressure and humidity.
+
+The "-dt" version formats the x-axis as datetime and assumes an
+additional datetime-column
+(added with `files/usr/local/bin/py-datareader.py`).
+
