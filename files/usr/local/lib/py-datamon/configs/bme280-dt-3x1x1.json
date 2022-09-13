@@ -1,0 +1,21 @@
+{
+  "width": 1600,
+  "height": 900,
+  "title":  "BME280 Sensor Data",
+  "x": {"col":   4, "type": "datetime"},
+  "xaxis": "time (sec)",
+  "plots": [
+    {"values": [{"col":   1, "label": "Temperature (°C)"}],
+     "yaxis": "°C",
+     "title": "Temperature (°C)"
+    },
+    {"values": [{"col":   2, "label": "Pressure (hPa)"}],
+     "yaxis": "hPa",
+     "title": "Pressure (hPa)"
+    },
+    {"values": [{"col":   3, "label": "Humidity (%)"}],
+     "yaxis": "%",
+     "title": "Humidity (%)"
+    }
+   ]
+}

@@ -1,0 +1,46 @@
+{ "cols": 3,
+  "width": 1600,
+  "height": 900,
+  "title":  "Smartpower 3",
+  "x": {"col":   17, "type": "datetime", "format": "%X"},
+  "xaxis": {"text": "datetime", "rescale": {"min": "+30", "max": "+60"}},
+  "legend": {"loc": null},
+  "plots": [
+    {"values": [{"col":   1, "label": "Input Voltage"}],
+     "yaxis": {"text": "mV"},
+     "title": "Input Voltage"
+    },
+    {"values": [{"col":   2, "label": "Input Current"}],
+     "yaxis": "mA",
+     "title": "Input Current"
+    },
+    {"values": [{"col":   3, "label": "Input Power"}],
+     "yaxis": "mW",
+     "title": "Input Power"
+    },
+    {"values": [{"col":   5, "label": "Ch0 Voltage"}],
+     "yaxis": {"text": "mV"},
+     "title": "Ch0 Voltage"
+    },
+    {"values": [{"col":   6, "label": "Ch0 Current"}],
+     "yaxis": "mA",
+     "title": "Ch0 Current"
+    },
+    {"values": [{"col":   7, "label": "Ch0 Power"}],
+     "yaxis": "mW",
+     "title": "Ch0 Power"
+    },
+    {"values": [{"col":  10, "label": "Ch1 Voltage"}],
+     "yaxis": {"text": "mV", "min": 4950, "max": 5050},
+     "title": "Ch1 Voltage"
+    },
+    {"values": [{"col":  11, "label": "Ch1 Current"}],
+     "yaxis": {"text": "mA", "min": 20, "max": 25},
+     "title": "Ch1 Current"
+    },
+    {"values": [{"col":  12, "label": "Ch1 Power"}],
+     "yaxis": "mW",
+     "title": "Ch1 Power"
+    }
+   ]
+}
