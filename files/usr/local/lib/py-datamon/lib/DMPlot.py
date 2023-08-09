@@ -240,9 +240,17 @@ class DMPlot:
         axs[r][c].xaxis.set_major_locator(locator)
         axs[r][c].xaxis.set_major_formatter(formatter)
       if plot_cfg.xaxis.min:
-        axs[r][c].set_xlim(left=plot_cfg.xaxis.min)
+        if plot_cfg.x.type in ["date","datetime"]:
+          axs[r][c].set_xlim(
+            left=datetime.datetime.strptime(plot_cfg.xaxis.min,"%Y-%m-%dT%H:%M:%S"))
+        else:
+          axs[r][c].set_xlim(left=plot_cfg.xaxis.min)
       if plot_cfg.xaxis.max:
-        axs[r][c].set_xlim(right=plot_cfg.xaxis.max)
+        if plot_cfg.x.type in ["date","datetime"]:
+          axs[r][c].set_xlim(
+            right=datetime.datetime.strptime(plot_cfg.xaxis.max,"%Y-%m-%dT%H:%M:%S"))
+        else:
+          axs[r][c].set_xlim(right=plot_cfg.xaxis.max)
       if plot_cfg.yaxis.min:
         axs[r][c].set_ylim(bottom=plot_cfg.yaxis.min)
       if plot_cfg.yaxis.max:
