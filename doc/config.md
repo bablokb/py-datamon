@@ -159,8 +159,8 @@ first column (i.e. column zero) with label "time".
           "format":    <optional, date/datetime-strftime-format}
 
 Setting "normalize" to `true` shifts the data to the left, so the time
-axis starts at 0. An optional "scale"-value will scale the data, e.g.
-to convert milliseconds to seconds provide `"scale": 0.001`.
+axis starts at 0. An optional "scale"-value will give the scale of the
+data, e.g.  time-data in milliseconds needs `"scale": 0.001`.
 
 The "type"-attribute will help to format x-values correctly.
 
@@ -180,14 +180,18 @@ Value-Definition
 
 The values-definition is a dictionary:
 
-    {"col":   <column-number within csv-data>,
-     "label": <"text", optional>,
-     "color": <line-color, optional>,
-     "axis":  <1|2, optional, default: 1>,
+    {"col":     <column-number within csv-data>,
+     "factor":  <multiply (scale) by the given factor, optional>,
+     "label":   <"text", optional>,
+     "color":   <line-color, optional>,
+     "axis":    <1|2, optional, default: 1>,
      "options": <optional, kw_args for matplotlib.pyplot.plot()>
     }
 
 If `"axis": 2` is set, the values will be for the second axis.
+
+Note that `factor` is different to the `scale`-parameter needed for the
+x-axis.
 
 
 Text-Options
