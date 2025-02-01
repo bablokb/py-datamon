@@ -23,6 +23,7 @@ class DMConfigValue(types.SimpleNamespace):
     self.label      = ""
     self.label_opts = {}
     self.options    = {}
+    self.factor     = 1
 
     # override with data from config-file
     super(DMConfigValue,self).__init__(**conf)
