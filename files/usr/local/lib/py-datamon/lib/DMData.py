@@ -255,7 +255,7 @@ class DMData:
 
     # normalize data (i.e. first observation to timestamp = 0)
     if self._config.x.normalize:
-      if self._x_low < 0:
+      if self._x_low < 0:                   # true only for very first record
         self._x_low = record[self._config.x.col]
       record[self._config.x.col] -= self._x_low
 
@@ -263,19 +263,27 @@ class DMData:
     if self._config.x.scale != 1:
       record[self._config.x.col] *= self._config.x.scale
 
-  # --- scale and normalize x-axis data   ------------------------------------
+    # scale values
+    for col,scale in self._config.col_scaled.items():
+      record[col] *= scale
 
-  def _scale_x(self):
-    """ scale and normalize x-axis data """
+  # --- scale and normalize data   -------------------------------------------
 
-    # normalize data (i.e. first observation to timestamp = 0)
+  def _scale_data(self):
+    """ scale and normalize data """
+
+    # normalize x-axis (i.e. first observation to timestamp = 0)
     if self._config.x.normalize:
       x_low = self._data[0,self._config.x.col]
       self._data[:,self._config.x.col] -= x_low
 
-    # scale data (eg. from ms to s)
+    # scale x-axis (eg. from ms to s)
     if self._config.x.scale != 1:
       self._data[:,self._config.x.col] *= self._config.x.scale
+
+    # scale values
+    for col,scale in self._config.col_scaled.items():
+      self._data[:,col] *= scale
 
   # --- read data from csv-file   --------------------------------------------
 
@@ -323,7 +331,7 @@ class DMData:
     self._index_high = self._data.shape[0]
 
     # normalize and scale data
-    self._scale_x()
+    self._scale_data()
 
   # --- start reader thread for dynamic data   -------------------------------
 

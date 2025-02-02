@@ -53,6 +53,11 @@ class DMConfigPlot(types.SimpleNamespace):
     self.msg("DMConfigPlot: parsing config for %d subplots" % len(self.plots))
     self.plots = [DMConfigSubplot(app,self,plot) for plot in self.plots]
 
+    # collect y-columns with scaling from subplots
+    self.col_scaled = {}
+    for plots in self.plots:
+        self.col_scaled.update(plots.col_scaled)
+
     self._get_layout()
     self.msg("DMConfigPlot: subplot-layout is %dx%d" % (self.rows,self.cols))
 

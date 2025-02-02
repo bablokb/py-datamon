@@ -48,6 +48,12 @@ class DMConfigSubplot(types.SimpleNamespace):
     self.msg("DMConfigSubplot: parsing config for %d y-values" % len(self.values))
     self.values = [DMConfigValue(app,value) for value in self.values]
 
+    # extract y-columns with scaling into a dict
+    self.col_scaled = {}
+    for value in self.values:
+      if value.scale != 1:
+        self.col_scaled[value.col] = value.scale
+
     if isinstance(self.title,dict):
       self.title_opts = self.title
       self.title      = self.title_opts['text']
