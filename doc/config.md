@@ -190,8 +190,11 @@ The values-definition is a dictionary:
 
 If `"axis": 2` is set, the values will be for the second axis.
 
-Note that `factor` is different to the `scale`-parameter needed for the
-x-axis.
+Note that `factor` is different to the `scale`-parameter needed for
+the x-axis. Important: a value (column) can be part of multiple
+subplots, but you cannot scale the value independently. If multiple
+definitions with a factor for a give column exist, the last takes
+precedence.
 
 
 Text-Options
