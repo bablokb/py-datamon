@@ -120,3 +120,13 @@ The "-dt" version formats the x-axis as datetime and assumes an
 additional datetime-column
 (added with `files/usr/local/bin/py-datareader.py`).
 
+
+ppk2.json
+---------
+
+Configuration for current measurments with the Nordic PPK2 Power Profiler.
+The device allows the export of the data in CSV format. Timestamps are
+exported in ms, values in µA. This example config scales the current
+values from µA to mA.
+
+![](../images/ppk2.png)
