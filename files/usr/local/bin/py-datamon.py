@@ -107,27 +107,33 @@ class App:
   def read_config(self):
     """ read configuration-file, if supplied """
 
+    conf_file = None
     if self.config:
-      p = Path(self.config)
-      if not p.exists() and not p.is_absolute():
+      conf_file = Path(self.config)
+      if not conf_file.exists() and not conf_file.is_absolute():
         # try in default location
         p = Path(sys.argv[0]).parent / "../lib/py-datamon/configs" / self.config
-        if not p.exists():
+        if not conf_file.exists():
           self.msg("App: config-file %s does not exist" % self.config,True)
           return False
-    else:
+    elif self.input != "-" and Path(self.input).is_file():
+      conf_file = Path(self.input).with_suffix(".json")
+
+    if not conf_file:
       # use default
-      p = Path(sys.argv[0]).parent / "../lib/py-datamon/configs/default.json"
+      conf_file = (
+        Path(sys.argv[0]).parent / "../lib/py-datamon/configs/default.json"
+      )
 
     try:
-      self.msg("App: reading configuration from %s" % str(p))
-      f = open(p,"r")
+      self.msg(f"App: reading configuration from {conf_file}")
+      f = open(conf_file,"r")
       plot = json.load(f)
       f.close()
       self.config = DMConfigPlot(self,plot)
       return True
     except:
-      self.msg("App: reading configuration from %s failed" % str(p),True)
+      self.msg(f"App: reading configuration from {conf_file} failed",True)
       if self.debug:
         traceback.print_exc()
       return False
