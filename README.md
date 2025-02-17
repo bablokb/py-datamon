@@ -73,7 +73,12 @@ part of the project and are in `/usr/local/lib/py-datamon/configs`.
 Configuration files don't have to be there, just pass the path to
 your file to the `-c`-option.
 
-The formal definition of a configuration-file is in
+If you don't provide an explicit configuration-file, the program
+first tries to use a configuration with the the ".csv"-suffix of the
+data file replaced by ".json". If this file does not exist, it
+uses the file `default.json` from `/usr/local/lib/py-datamon/configs`.
+
+The formal definition of a configuration-file is documented in
 [doc/config.md](doc/config.md). You have to define
 
   - how many subplots you want
