@@ -2,7 +2,7 @@
   "width":  800,
   "height": 400,
   "title":  "PPK2 Current",
-  "x": {"col":   0, "type": "plain", "scale": 0.001},
+  "x": {"col":   0, "type": "plain", "scale": 0.001, "normalize": true},
   "xaxis": {"text": "time (sec)"},
   "yaxis": {"text": "mA", "color": "red"},
   "legend": {"loc": null},
